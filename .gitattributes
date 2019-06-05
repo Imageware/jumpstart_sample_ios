@@ -1,0 +1,8 @@
+./ios_gmi/GMI.framework filter=lfs diff=lfs merge=lfs -text
+./ios_gmi/GMI.framework/Versions/A/GMI filter=lfs diff=lfs merge=lfs -text
+./ios_gmi/GMI.framework/Versions/A filter=lfs diff=lfs merge=lfs -text
+./ios_gmi/GMI.framework/Versions filter=lfs diff=lfs merge=lfs -text
+./ios_gmi/GMI.framework/Frameworks/PalmAPI.framework/PalmAPI filter=lfs diff=lfs merge=lfs -text
+./ios_gmi/GMI.framework/Frameworks/PalmAPI.framework filter=lfs diff=lfs merge=lfs -text
+./ios_gmi/GMI.framework/Frameworks filter=lfs diff=lfs merge=lfs -text
+./ios_gmi/GMI_Res.bundle filter=lfs diff=lfs merge=lfs -text

@@ -1,0 +1,23 @@
+
+/* Class = "UILabel"; text = "Say:"; ObjectID = "268-cA-AFe"; */
+"268-cA-AFe.text" = "Say:";
+
+/* Class = "UIButton"; normalTitle = "Record"; ObjectID = "2u7-eG-46Z"; */
+"2u7-eG-46Z.normalTitle" = "Record";
+
+/* Class = "UILabel"; text = "Tap to begin recording."; ObjectID = "4Ro-y9-bk5"; */
+"4Ro-y9-bk5.text" = "「Record」をタッチして開始してください。";
+
+/* Class = "UILabel"; text = "Step %d of %d"; ObjectID = "8Uq-jM-0SU"; */
+"8Uq-jM-0SU.text" = "%d回目";
+
+/* Class = "UILabel"; text = "Too Short"; ObjectID = "DqE-sw-liD"; */
+"DqE-sw-liD.text" = "Too Short";
+
+/* Class = "UIButton"; normalTitle = "Cancel"; ObjectID = "HT9-L7-gHG"; */
+"HT9-L7-gHG.normalTitle" = "Cancel";
+
+/* Class = "UILabel"; text = "asd"; ObjectID = "hgO-Ff-Jeu"; */
+"hgO-Ff-Jeu.text" = "asd";
+
+"Tap when done." = "終了したら「Done」をタッチしてください。";

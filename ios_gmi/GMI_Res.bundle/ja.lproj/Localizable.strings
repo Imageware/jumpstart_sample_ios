@@ -1,0 +1,15 @@
+/* 
+  Localizable.strings
+  GMI
+
+  Created by cbrooks on 3/14/16.
+  Copyright © 2016 ImageWare Systems Inc. All rights reserved.
+*/
+
+"Tap to begin recording." = "「Record」をタッチして開始してください。";
+"Tap when done." = "終了したら「Done」をタッチしてください。";
+"Step %d of 3" = "%d回目";
+
+// html view controller
+"Message Not Found" = "メッセージが見つかりません";
+"Mic Access Required" = "マイクへのアクセスが必要";

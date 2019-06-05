@@ -1,0 +1,63 @@
+/* 
+  Localizable.strings
+  GMI
+
+  Created by cbrooks on 3/14/16.
+  Copyright © 2016 ImageWare Systems Inc. All rights reserved.
+*/
+
+
+// html view controller
+"Message Not Found" = "Message Not Found";
+"There was a problem loading your message. Check that you have internet access (preferably Wi-Fi) and try again." = "There was a problem loading your message. Check that you have internet access (preferably Wi-Fi) and try again.";
+"Message Template Not Found" = "Message Template Not Found";
+"Sorry, but the message template couldn't be found. Please contact your provider." = "Sorry, but the message template couldn't be found. Please contact your provider.";
+
+// microphone capture
+"Please say your passphrase of at least 4 seconds in length.\nTap anywhere to begin" = "Please say your passphrase of at least 4 seconds in length.\nTap anywhere to begin";
+"Set %d of %d.\nPlease say your passphrase of at least 4 seconds in length." = "Set %d of %d.\nPlease say your passphrase of at least 4 seconds in length.";
+"Please say your passphrase of at least 4 seconds in length." = "Please say your passphrase of at least 4 seconds in length.";
+"Say each number as it appears after the tone." = "Say each number as it appears after the tone.";
+"Ready?" = "Ready?";
+"Begin." = "Begin.";
+"Say each number as it appears." = "Say each number as it appears.";
+"Voice capture is complete." = "Voice capture is complete.";
+"Set %d is finished." = "Set %d is finished.";
+"Set %d is finished.\nStarting set %d." = "Set %d is finished.\nStarting set %d.";
+
+// face capture
+"Center your face inside the guide" = "Center your face inside the guide";
+"Please stay still." = "Please stay still.";
+
+// facevoice capture
+"Center your face inside the guide.\nTap anywhere to start" = "Center your face inside the guide.\nTap anywhere to start";
+"Center your face inside the guide" = "Center your face inside the guide";
+"Keep centered inside the guide.\nSay each number as it appears." = "Keep centered inside the guide.\nSay each number as it appears.";
+"Keep centered inside the guide.\nSpeak your passphrase." = "Keep centered inside the guide.\nSpeak your passphrase.";
+"Please stay still." = "Please stay still.";
+
+// fingerprint capture
+"Please verify that you own this device." = "Please verify that you own this device.";
+"Could not verify your fingerprint or passcode." = "Could not verify your fingerprint or passcode.";
+"Fingerprint support detected, please go to your phone's privacy settings and register your fingerprint before continuing." = "Fingerprint support detected, please go to your phone's privacy settings and register your fingerprint before continuing.";
+"Fingerprint support not detected." = "Fingerprint support not detected.";
+"Fingerprint support not detected, update your device to iOS 8 to continue." = "Fingerprint support not detected, update your device to iOS 8 to continue.";
+"Scan your fingerprint" = "Scan your fingerprint";
+
+// misc prompts
+"Are you sure you want to cancel?" = "Are you sure you want to cancel?";
+"Cancel?" = "Cancel?";
+"Cancel" = "Cancel";
+"Resume capture" = "Resume capture";
+"Resume Capture" = "Resume Capture";
+"Yes" = "Yes";
+"Back" = "Back";
+"Done" = "Done";
+"Okay" = "Okay";
+"Thank you" = "Thank you";
+"Tap to begin." = "Tap to begin.";
+"Tap anywhere to begin" = "Tap anywhere to begin";
+"Tap anywhere to start" = "Tap anywhere to start";
+"Restart" = "Restart";
+"Continue" = "Continue";
+"Capture complete." = "Capture complete.";
