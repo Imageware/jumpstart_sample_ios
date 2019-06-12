@@ -21,6 +21,7 @@
 #import "AppDelegate.h"
 #import "GmiServerAccess.h"
 #import "SampleGmiViewController.h"
+#import <GMI/GMIHTMLViewController.h>
 
 //#import <GMI/GMIHTMLViewController.h>
 //#import <GMI/GMIResponseBuilder.h>
@@ -381,8 +382,10 @@
         return;
     }
     
+
     if (disabledEnrollProcessing==NO)
     {
+        // View will appear again after popview controller. SHould only do once.
         [self checkEnrollsForPerson:thisGMIPerson];
     }
     else // Must be verify.
@@ -658,7 +661,7 @@
     [[GMIClient sharedClient] getGMIPersonByUserId:userId success:^(GMIPerson *person) {
         DBG_Log(@"Person get: %@", [person description]);
         DBG_Log(@"Device belongs to app...");
-        [self setUserName:userId];
+//        [self setUserName:userId];  // Should already be set.
         
         [[GMIClient sharedClient] getPeopleForThisDeviceSuccess:^(NSArray *arrayOfPeople) {
             bool personIsTied = NO;
@@ -1284,6 +1287,9 @@
     
     void (^localSuccessBlock)(void) = ^(void) {
         NSLog(@"success");
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, NSEC_PER_MSEC * 10000), dispatch_get_main_queue(), ^{
+            [GMIHTMLViewController cancelBiometricsAttempt];  // Disable internal 30 second timer.
+        });
     };
     
     void (^failureBlock)(GMIError*) = ^(GMIError *error) {
@@ -1552,6 +1558,21 @@
                     if ([json isKindOfClass:[NSDictionary class]])
                     {
                         extraDictionary = json;
+                        NSString *extraMessage = [extraDictionary objectForKey:@"data"];
+                        
+                        if ([extraMessage containsString:@"cancelled"])
+                        {
+                            [self skipCurrentEnroll];
+                            // Is there another enroll message to process?
+                            
+                            dispatch_async(dispatch_get_main_queue(), ^{
+                                if ([self processGMIMessages] == FALSE)
+                                {
+                                    [self enrollComplete];
+                                }
+                            });
+                            return;
+                        }
                     }
                 }
             }

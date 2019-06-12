@@ -43,7 +43,6 @@
 @interface ViewController ()
 {
     SampleGmiViewController *gmiVC;
-    BOOL isRegistering;
     BOOL isVerifying;
     GMIPerson *registeredPerson;
 }
@@ -111,11 +110,17 @@
     
     [_userIdTextField resignFirstResponder];
     
-    // Calls textFieldDidEndEditing
     return YES;
 }
-    
+
+
+
 - (void)textFieldDidEndEditing:(UITextField *)textField
+{
+    // Do nothing, must press buttons for action.
+}
+
+- (void) processUser:(BOOL ) isRegistering
 {
     // Pass the username into the next viewcontroller.
     
@@ -148,6 +153,21 @@
             {
                 // Valid person, already registered or new user. Save the data for later access.
                 self->registeredPerson = person;                
+                NSString *uMessage = [NSString stringWithFormat:@"'%@' Registered", trimmedString];
+                UIAlertController *alertController = [UIAlertController
+                                                      alertControllerWithTitle:@"Success"
+                                                      message: uMessage
+                                                      preferredStyle:UIAlertControllerStyleAlert];
+                UIAlertAction *okAction = [UIAlertAction
+                                           actionWithTitle:@"OK"
+                                           style:UIAlertActionStyleDefault
+                                           handler:^(UIAlertAction *action)
+                                           {
+                                               [self dismissViewControllerAnimated:NO completion:nil];
+                                           }];
+                [alertController addAction:okAction];
+                
+                [self presentViewController:alertController animated:YES completion:nil];
             }
             else  // Unable to create user name (bad characters?)
             {
@@ -186,6 +206,8 @@
                 if (person)
                 {
                     UINavigationController *navControl = [[UINavigationController alloc] initWithRootViewController:self->gmiVC];
+                    
+                    self->registeredPerson = person;
                     
                     [self->gmiVC setCurrentGmiPerson: self->registeredPerson];
                     
@@ -233,9 +255,6 @@
     //
     // Check for user, and create if necessary.
     //
-    
-    isRegistering = YES;
-    
     if ([_userIdTextField isFirstResponder])
     {
         [_userIdTextField resignFirstResponder];
@@ -243,10 +262,9 @@
     else
     {
         [[NSUserDefaults standardUserDefaults] removeObjectForKey:VALID_UUID];  // Could be new user, wipe out old info.
-        [self textFieldDidEndEditing:_userIdTextField];
+        [self processUser:YES];  // Registering
     }
-    
-    // Calls textFieldDidEndEditing
+
 }
 
 
@@ -255,18 +273,16 @@
     //
     // Process enroll messages.
     //
-    isRegistering = NO;
-    
+    [SampleGmiViewController clearEnrollCaptureType];  // Allow all enroll capture types, since may be new user.
+
     if ([_userIdTextField isFirstResponder])
     {
         [_userIdTextField resignFirstResponder];
     }
     else
     {
-        [self textFieldDidEndEditing:_userIdTextField];
+        [self processUser:NO];
     }
-    
-    // Calls textFieldDidEndEditing
 }
 
 
