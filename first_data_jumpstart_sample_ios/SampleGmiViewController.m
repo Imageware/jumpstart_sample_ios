@@ -1191,6 +1191,7 @@
         NSLog(@"Presentation complete");
         // Bug in UI, when app installed clean, this alert appears, then disappears.
         // Leave the alert up for 10 seconds, then dismiss it.
+#ifdef NOMORE
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 10 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
             if (alertController)
             {
@@ -1203,6 +1204,7 @@
                 [self dismissViewControllerAnimated:YES completion:nil];  // Dismiss this view controller.
             }
         });
+#endif
     }];
 
 }
@@ -1287,7 +1289,7 @@
     
     void (^localSuccessBlock)(void) = ^(void) {
         NSLog(@"success");
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, NSEC_PER_MSEC * 10000), dispatch_get_main_queue(), ^{
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, NSEC_PER_MSEC * 2000), dispatch_get_main_queue(), ^{
             [GMIHTMLViewController cancelBiometricsAttempt];  // Disable internal 30 second timer.
         });
     };
@@ -1298,7 +1300,7 @@
     };
 
     [SampleGmiViewController setOrientationPortrait];
-    
+
     [[GMIClient sharedClient] renderMessage:message withNavController:self.navigationController withAnimation:NO withSuccess:localSuccessBlock withFailure:failureBlock];
     
     NSLog(@"Done presentation");
@@ -1513,7 +1515,6 @@
             enrollCount++;  // Keep a count of successful biometric enroll. We won't allow bypassing both.
             
             // Is there another enroll message to process?
-            
             dispatch_async(dispatch_get_main_queue(), ^{
                  if ([self processGMIMessages] == FALSE)
                  {
@@ -1620,6 +1621,17 @@
                         
                         return;
                     }
+                    else if ([extraString containsString:@"onRequestEnrollment"])
+                    {
+                            // Need to enroll.
+                        self->disabledEnrollProcessing = NO;
+                        // No message in queue, load the enroll messages.
+                        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 2 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+                            [self checkEnrollsForPerson:self->thisGMIPerson];
+                        });
+                         return;
+                     }
+
                 }
              }
         }

@@ -54,11 +54,11 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "first_data_jumpstart_sample_ios/SampleGmiViewController.m"
-            timestampString = "582071740.853159"
+            timestampString = "582238639.938916"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "728"
@@ -67,14 +67,14 @@
             landmarkType = "7">
             <Locations>
                <Location
-                  shouldBeEnabled = "Yes"
+                  shouldBeEnabled = "No"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
                   symbolName = "__60-[SampleGmiViewController checkUserAndDeviceStatus:success:]_block_invoke.246"
                   moduleName = "first_data_jumpstart_sample_ios"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/hchan/Documents/GitHub/first_data_jumpstart_sample_ios/first_data_jumpstart_sample_ios/SampleGmiViewController.m"
-                  timestampString = "582071741.087133"
+                  timestampString = "582156464.227695"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "728"
@@ -82,14 +82,14 @@
                   offsetFromSymbolStart = "216">
                </Location>
                <Location
-                  shouldBeEnabled = "Yes"
+                  shouldBeEnabled = "No"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
                   symbolName = "__60-[SampleGmiViewController checkUserAndDeviceStatus:success:]_block_invoke_2.251"
                   moduleName = "first_data_jumpstart_sample_ios"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/hchan/Documents/GitHub/first_data_jumpstart_sample_ios/first_data_jumpstart_sample_ios/SampleGmiViewController.m"
-                  timestampString = "582071741.09034"
+                  timestampString = "582156464.22955"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "729"
@@ -106,7 +106,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "first_data_jumpstart_sample_ios/SampleGmiViewController.m"
-            timestampString = "582071740.853545"
+            timestampString = "582238639.939292"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "928"
@@ -122,7 +122,7 @@
                   moduleName = "first_data_jumpstart_sample_ios"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/hchan/Documents/GitHub/first_data_jumpstart_sample_ios/first_data_jumpstart_sample_ios/SampleGmiViewController.m"
-                  timestampString = "582071741.095708"
+                  timestampString = "582238640.167706"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "930"
@@ -137,7 +137,7 @@
                   moduleName = "first_data_jumpstart_sample_ios"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/hchan/Documents/GitHub/first_data_jumpstart_sample_ios/first_data_jumpstart_sample_ios/SampleGmiViewController.m"
-                  timestampString = "582071741.097502"
+                  timestampString = "582238640.169497"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "930"
@@ -154,7 +154,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "first_data_jumpstart_sample_ios/SampleGmiViewController.m"
-            timestampString = "582071740.853799"
+            timestampString = "582238639.939514"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "935"
@@ -170,7 +170,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "first_data_jumpstart_sample_ios/SampleGmiViewController.m"
-            timestampString = "582071740.854058"
+            timestampString = "582238639.939723"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "816"
@@ -186,7 +186,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "first_data_jumpstart_sample_ios/SampleGmiViewController.m"
-            timestampString = "582071740.854286"
+            timestampString = "582238639.93993"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "902"
@@ -202,7 +202,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "first_data_jumpstart_sample_ios/SampleGmiViewController.m"
-            timestampString = "582071740.854513"
+            timestampString = "582238639.940138"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "1072"
@@ -218,7 +218,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "first_data_jumpstart_sample_ios/SampleGmiViewController.m"
-            timestampString = "582071740.854739"
+            timestampString = "582238639.940343"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "944"
@@ -234,7 +234,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "first_data_jumpstart_sample_ios/SampleGmiViewController.m"
-            timestampString = "582071740.854966"
+            timestampString = "582238639.940587"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "1059"
@@ -250,7 +250,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "first_data_jumpstart_sample_ios/SampleGmiViewController.m"
-            timestampString = "582071740.855193"
+            timestampString = "582238639.9407949"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "1082"
@@ -266,7 +266,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "first_data_jumpstart_sample_ios/SampleGmiViewController.m"
-            timestampString = "582071740.855415"
+            timestampString = "582238639.941"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "1056"
@@ -278,15 +278,15 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "first_data_jumpstart_sample_ios/SampleGmiViewController.m"
-            timestampString = "582071740.855649"
+            timestampString = "582238639.941206"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1697"
-            endingLineNumber = "1697"
+            startingLineNumber = "1709"
+            endingLineNumber = "1709"
             landmarkName = "-presentVerification:"
             landmarkType = "7">
          </BreakpointContent>
@@ -298,11 +298,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "first_data_jumpstart_sample_ios/SampleGmiViewController.m"
-            timestampString = "582071740.8558739"
+            timestampString = "582238639.9414181"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1705"
-            endingLineNumber = "1705"
+            startingLineNumber = "1717"
+            endingLineNumber = "1717"
             landmarkName = "-presentVerification:"
             landmarkType = "7">
          </BreakpointContent>
@@ -314,7 +314,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "first_data_jumpstart_sample_ios/SampleGmiViewController.m"
-            timestampString = "582071740.856094"
+            timestampString = "582238639.941627"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "924"
@@ -330,7 +330,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "first_data_jumpstart_sample_ios/SampleGmiViewController.m"
-            timestampString = "582071740.856311"
+            timestampString = "582238639.941833"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "931"
@@ -346,7 +346,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "first_data_jumpstart_sample_ios/SampleGmiViewController.m"
-            timestampString = "582071740.8565381"
+            timestampString = "582238639.9420381"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "1064"
@@ -362,7 +362,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "first_data_jumpstart_sample_ios/ViewController.m"
-            timestampString = "582071740.856758"
+            timestampString = "582238639.942243"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "313"
@@ -378,7 +378,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "first_data_jumpstart_sample_ios/ViewController.m"
-            timestampString = "582071740.856796"
+            timestampString = "582238639.942277"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "111"
@@ -390,47 +390,15 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "first_data_jumpstart_sample_ios/SampleGmiViewController.m"
-            timestampString = "582071740.85683"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1597"
-            endingLineNumber = "1597"
-            landmarkName = "-onMessageResponse:"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "first_data_jumpstart_sample_ios/SampleGmiViewController.m"
-            timestampString = "582071740.857051"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1520"
-            endingLineNumber = "1520"
-            landmarkName = "-onMessageResponse:"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "first_data_jumpstart_sample_ios/SampleGmiViewController.m"
-            timestampString = "582071740.857264"
+            timestampString = "582238639.942306"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1212"
-            endingLineNumber = "1212"
+            startingLineNumber = "1214"
+            endingLineNumber = "1214"
             landmarkName = "-enrollComplete"
             landmarkType = "7">
          </BreakpointContent>
@@ -442,23 +410,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "first_data_jumpstart_sample_ios/SampleGmiViewController.m"
-            timestampString = "582071740.8574769"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "843"
-            endingLineNumber = "843"
-            landmarkName = "-checkEnrollsForPerson:"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "first_data_jumpstart_sample_ios/SampleGmiViewController.m"
-            timestampString = "582071740.857685"
+            timestampString = "582238639.942515"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "499"
@@ -502,27 +454,11 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "first_data_jumpstart_sample_ios/SampleGmiViewController.m"
-            timestampString = "582071740.857893"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "684"
-            endingLineNumber = "684"
-            landmarkName = "-checkUserAndDeviceStatus:success:"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "first_data_jumpstart_sample_ios/SampleGmiViewController.m"
-            timestampString = "582071740.858096"
+            timestampString = "582238639.942763"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "734"
@@ -538,12 +474,156 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "first_data_jumpstart_sample_ios/SampleGmiViewController.m"
-            timestampString = "582071740.858299"
+            timestampString = "582238639.943004"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "762"
             endingLineNumber = "762"
             landmarkName = "-checkUserAndDeviceStatus:success:"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "first_data_jumpstart_sample_ios/SampleGmiViewController.m"
+            timestampString = "582238639.9432091"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "1627"
+            endingLineNumber = "1627"
+            landmarkName = "-onMessageResponse:"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "first_data_jumpstart_sample_ios/SampleGmiViewController.m"
+            timestampString = "582238639.943417"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "840"
+            endingLineNumber = "840"
+            landmarkName = "-checkEnrollsForPerson:"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "first_data_jumpstart_sample_ios/SampleGmiViewController.m"
+            timestampString = "582238639.943622"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "1606"
+            endingLineNumber = "1606"
+            landmarkName = "-onMessageResponse:"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "first_data_jumpstart_sample_ios/SampleGmiViewController.m"
+            timestampString = "582238639.943827"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "1566"
+            endingLineNumber = "1566"
+            landmarkName = "-onMessageResponse:"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "first_data_jumpstart_sample_ios/SampleGmiViewController.m"
+            timestampString = "582238639.9440351"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "1572"
+            endingLineNumber = "1572"
+            landmarkName = "-onMessageResponse:"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "first_data_jumpstart_sample_ios/SampleGmiViewController.m"
+            timestampString = "582238639.944239"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "959"
+            endingLineNumber = "959"
+            landmarkName = "-registerUser:completion:"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "first_data_jumpstart_sample_ios/SampleGmiViewController.m"
+            timestampString = "582238639.944434"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "847"
+            endingLineNumber = "847"
+            landmarkName = "-checkEnrollsForPerson:"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "first_data_jumpstart_sample_ios/SampleGmiViewController.m"
+            timestampString = "582238639.94463"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "381"
+            endingLineNumber = "381"
+            landmarkName = "-viewDidAppear:"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "first_data_jumpstart_sample_ios/SampleGmiViewController.m"
+            timestampString = "582238639.944833"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "477"
+            endingLineNumber = "477"
+            landmarkName = "-processGMIMessages"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

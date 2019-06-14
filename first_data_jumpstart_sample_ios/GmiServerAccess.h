@@ -23,6 +23,8 @@
 -(void) associatePerson:(NSString *)personUUID completion:(void (^)(NSString *messageId)) completion;
 
 
-#define VERIFY_TEMPLATE_NAME  @"UNIVERSAL_VERIFY_CHOICEALL"
+#define VERIFY_TEMPLATE_NAME  @"UNIVERSAL_VERIFY_VOICE"
+
+
 @end
 
