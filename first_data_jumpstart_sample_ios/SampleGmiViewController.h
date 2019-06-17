@@ -39,6 +39,7 @@
 -(void) noEnrollProcessing:(BOOL) disableEnrolls;
 -(void) registerUser: (NSString *) userId completion:(void (^)(GMIPerson * gmiPerson)) completion;
 -(void) setCurrentGmiPerson: (GMIPerson *) nowPerson;
+-(void) findUserId : (NSString *) userId success: (void (^)(GMIPerson *))foundPerson;
 
 
 +(NSDictionary *) clientCredentials;

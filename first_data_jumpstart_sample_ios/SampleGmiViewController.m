@@ -644,6 +644,36 @@
 }
 
 
+-(void) findUserId : (NSString *) userId success: (void (^)(GMIPerson *))foundPerson
+{
+    // CaN'T Call this yet.
+//    [[GMIClient sharedClient] getGMIPersonByUserId:userId success:^(GMIPerson *person) {
+    [self setUserName:userId];
+
+    [self view];   // Force viewDidLoad.
+    
+    [self noEnrollProcessing:TRUE];
+
+        [[GMIClient sharedClient] getPeopleForThisDeviceSuccess:^(NSArray *arrayOfPeople) {
+            GMIPerson *foundMe = nil;
+            for (GMIPerson *peep in arrayOfPeople) {
+                if ([peep.userId isEqualToString: userId]) {
+                    foundMe = peep;
+                }
+            }
+            // if the person isn't tied, we'll create an empty GMIError (but one that isn't nil)
+            foundPerson(foundMe);
+            
+        } failure:^(GMIError *error) {
+            foundPerson(nil);
+        }];
+//         }  failure:^(GMIError *error) {
+//             foundPerson(nil);
+//    }] ;
+        
+    return;
+}
+
 //
 // GMI server calls are asyncronous.  Success block called only when user is valid.
 //
@@ -1288,11 +1318,11 @@
     }
     
     void (^localSuccessBlock)(void) = ^(void) {
+        // Called after selection choice (voice)
         NSLog(@"success");
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, NSEC_PER_MSEC * 2000), dispatch_get_main_queue(), ^{
-            [GMIHTMLViewController cancelBiometricsAttempt];  // Disable internal 30 second timer.
-        });
     };
+
+    
     
     void (^failureBlock)(GMIError*) = ^(GMIError *error) {
         NSLog(@"failed");
@@ -1302,7 +1332,15 @@
     [SampleGmiViewController setOrientationPortrait];
 
     [[GMIClient sharedClient] renderMessage:message withNavController:self.navigationController withAnimation:NO withSuccess:localSuccessBlock withFailure:failureBlock];
-    
+ 
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 2), dispatch_get_main_queue(), ^{
+        //
+        // Wait a few seconds for the global GMIHTMLViewController to initialize, then
+        // use method to disable internal time.  If called too early, won't work.
+        //
+        [GMIHTMLViewController cancelBiometricsAttempt];  // Disable internal 30 second timer.
+    });
+
     NSLog(@"Done presentation");
     
     return TRUE;
@@ -1580,8 +1618,10 @@
             if ([eventString compare:gmiresp_event_MessageAbandoned] == NSOrderedSame)
             {
                 if (extraInfo)
-                {
+                {   // Back button on nav bar
                     DBG_Log(@"Template Abandoned with %@", extraInfo);
+                    [self dismissViewControllerAnimated:NO completion:nil];
+                    return;
                 }
                 else
                 {

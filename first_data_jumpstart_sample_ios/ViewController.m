@@ -316,12 +316,6 @@
     NSString *userName = [[NSUserDefaults standardUserDefaults] objectForKey:VALID_USER];
 
     NSString *uuid = [[NSUserDefaults standardUserDefaults] objectForKey:VALID_UUID];
-
-    if (uuid==nil || registeredPerson == nil)
-    {
-        [self showRegisterFirstDialog];
-        return;
-    }
     
     //
     // Before processing the verification message, we should check to see if there are pending enrollments.
@@ -333,6 +327,27 @@
     if (gmiVC == nil)
     {
         gmiVC = [[SampleGmiViewController alloc] initWithCredentials:self.serverData withUserName:userName];
+    }
+    
+    
+    if (uuid==nil || registeredPerson == nil)
+    {
+        // Check if registered first.
+        [gmiVC findUserId : userName success:^(GMIPerson *person){
+            if (person)
+            {
+                // Already registered.
+                [[NSUserDefaults standardUserDefaults] setObject:person.userId forKey:VALID_USER];
+                [[NSUserDefaults standardUserDefaults] setObject:person.uuid forKey:VALID_UUID];
+                self->registeredPerson = person;
+                [self verifyButtonAction:nil];
+            }
+            else {
+                [self showRegisterFirstDialog];
+            }
+        }];
+        
+        return;
     }
     
     [gmiVC noEnrollProcessing:TRUE];
