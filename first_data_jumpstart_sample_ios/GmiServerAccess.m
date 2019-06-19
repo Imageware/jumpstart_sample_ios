@@ -41,7 +41,7 @@
                                  CLIENT_SECRET : @"p3AQlzCdJDIt",
                                  APP_CODE : @"authenticare",
                                  SERVER_NAME : @"https://deployment-gmi.iwsinc.com",  //"https://deployment-gmi.iwsinc.com"
-                                 CODED_64 :  @"ZmRhZG1pbjpwM0FRbHpDZEpESXQ="
+                                 CODED_64 :  @"ZmRhZG1pbjpwM0FRbHpDZEpESXQ="  // clientID:ClientSecret ===> 64baseEncodedValue
                                  };
     
     return serverDict;
@@ -61,6 +61,12 @@
     }
     serverData = userData;
     NSString *secret64 = userData[CODED_64];
+    if (secret64==nil)  // If no value, manually encode.
+    {
+        NSString *encodeValue = [NSString stringWithFormat:@"%@:%@", userData[CLIENT_ID], userData[CLIENT_SECRET]];
+        NSData *dataValue = [encodeValue dataUsingEncoding:NSUTF8StringEncoding];
+        secret64 = [dataValue base64EncodedStringWithOptions:NSDataBase64Encoding64CharacterLineLength];
+    }
     NSString *serverURL = userData[SERVER_NAME];
     NSString *authorizationString = [NSString stringWithFormat:@"Basic %@", secret64];
     NSDictionary *headers = @{ @"authorization": authorizationString,
@@ -124,7 +130,7 @@
  //  Requires ROLE_TENANT_ADMIN privileges or higher.
  
  */
--(void) validatehUserId:(NSString *)personUUID withDeviceId: (NSString *) devId completion:(void (^)(NSString * tokenString)) completion
+-(void) validatehUserId:(NSString *)userId withDeviceId: (NSString *) devId completion:(void (^)(NSString * tokenString)) completion
 {
     NSString *serverURL = serverData[SERVER_NAME];
     NSString *tenantName = serverData[TENANT_NAME];
@@ -133,8 +139,10 @@
     NSDictionary *headers = @{ @"authorization": authValue,
                                @"cache-control": @"no-cache" };
     
+    // Encode, so special characters can be sent
+    NSString *encodeUserId = [userId stringByAddingPercentEncodingWithAllowedCharacters:[[NSCharacterSet characterSetWithCharactersInString:@"/+=\n"] invertedSet]];
     NSString *gmiServerRequest = [NSString stringWithFormat:@"%@/gmiserver/tenant/%@/person/validate?userId=%@&deviceId=%@&appCode=%@",
-                                  serverURL, tenantName, personUUID, devId, appCode];
+                                  serverURL, tenantName, encodeUserId, devId, appCode];
     
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:gmiServerRequest]
                                                            cachePolicy:NSURLRequestUseProtocolCachePolicy
@@ -165,7 +173,7 @@
                                                         // Done. exit?
                                                         if(completion)
                                                         {
-                                                            completion(personUUID);  // TODO: Get uuid from json?
+                                                            completion(userId);  // TODO: Get uuid from json?
                                                         }
                                                     }
                                                 }];
@@ -268,6 +276,7 @@
 
     NSData *postData = [NSJSONSerialization dataWithJSONObject:parameters options:0 error:nil];
 
+    
     NSString *gmiServerRequest = [NSString stringWithFormat:@"%@/person/%@/message",
                                   templatePath, personUUID];
 

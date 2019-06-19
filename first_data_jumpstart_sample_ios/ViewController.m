@@ -7,27 +7,23 @@
 //
 //
 /*
-  LOGIC FLOW (first install)
+  App actions
 
-1. UserName entered (Verfiy button off)
-2. Check if registered in GMI via SDK call.
-3. If registered, goto step 5
-4. Not registered. Server call to register user. Followed by validate user call.
-5. Check enrollments messages. If none goto step 7
-6. Process enroll messages.  Go to step 5.
-7. Disable register button, enable verify button
-8. Verify. Server call to generate verification message.
-9. Present verify message from messageId
-10. Display success or failure (from Server REST call using messageId)
+ ==Register
+ 1. UserName entered
+ 2. Check if registered in GMI via SDK call.
+ 3. If not registered, Server call to register user (will generate enroll messages)
+ 4. If user does not exist, server call to generate user, then register.
+ 
+ ==Enroll
+ 1. Check enrollments messages.
+ 2. Process enroll messages.
 
- 
- 
-   LOGIC FLOW (restart)
- 
- 1. User Name filled from last entry
- 2. Verify button enabled, registrar button disabled.
- 3. Edit of user name disables Verify button (logic continues as first install).
- 4. Verify button creates verification message via Server REST call.
+ ==Verify
+1. Verify. Server call to generate verification message.
+2. Present verify message from messageId
+3. Display success or failure (from Server REST call using messageId)
+
 
 */
 #import "ViewController.h"
@@ -120,7 +116,7 @@
     // Do nothing, must press buttons for action.
 }
 
-- (void) processUser:(BOOL ) isRegistering
+- (void) processRegister
 {
     // Pass the username into the next viewcontroller.
     
@@ -138,103 +134,116 @@
     {
         [gmiVC setUserName:trimmedString];
     }
+
+    [gmiVC view];   // Force viewDidLoad.
     
-    if (isRegistering)// && !isRegistering)
+    [gmiVC noEnrollProcessing:TRUE];  // Registering only
+
+    [gmiVC registerUser: trimmedString completion:^(GMIPerson *person) {
+        
+        NSLog(@"Person: %@", person);
+        
+        if (person)
+        {
+            // Valid person, already registered or new user. Save the data for later access.
+            self->registeredPerson = person;
+            NSString *uMessage = [NSString stringWithFormat:@"'%@' Registered", trimmedString];
+            UIAlertController *alertController = [UIAlertController
+                                                  alertControllerWithTitle:@"Success"
+                                                  message: uMessage
+                                                  preferredStyle:UIAlertControllerStyleAlert];
+            UIAlertAction *okAction = [UIAlertAction
+                                       actionWithTitle:@"OK"
+                                       style:UIAlertActionStyleDefault
+                                       handler:^(UIAlertAction *action)
+                                       {
+                                           [self dismissViewControllerAnimated:NO completion:nil];
+                                       }];
+            [alertController addAction:okAction];
+            
+            [self presentViewController:alertController animated:YES completion:nil];
+        }
+        else  // Unable to create user name (bad characters?)
+        {
+            [[NSUserDefaults standardUserDefaults] removeObjectForKey:VALID_USER];
+            
+            NSString *uMessage = [NSString stringWithFormat:@"Unable to create '%@'", trimmedString];
+            UIAlertController *alertController = [UIAlertController
+                                                  alertControllerWithTitle:@"Error"
+                                                  message: uMessage
+                                                  preferredStyle:UIAlertControllerStyleAlert];
+            UIAlertAction *okAction = [UIAlertAction
+                                       actionWithTitle:@"OK"
+                                       style:UIAlertActionStyleDefault
+                                       handler:^(UIAlertAction *action)
+                                       {
+                                           [self dismissViewControllerAnimated:NO completion:nil];
+                                       }];
+            [alertController addAction:okAction];
+            
+            [self presentViewController:alertController animated:YES completion:nil];
+        }
+    }];  // Only need to do once, unless re-enrolling.
+}
+
+
+- (void) processEnrolls
+{
+    // Pass the username into the next viewcontroller.
+    
+    NSString *trimmedString = [_userIdTextField.text stringByTrimmingCharactersInSet:
+                               [NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    
+    [[NSUserDefaults standardUserDefaults] setObject:trimmedString forKey:VALID_USER];
+    
+    if (gmiVC == nil)
+    {
+        gmiVC = [[SampleGmiViewController alloc] initWithCredentials:self.serverData withUserName:trimmedString];
+        
+    }
+    else
+    {
+        [gmiVC setUserName:trimmedString];
+    }
+
+   [gmiVC noEnrollProcessing:FALSE];  // Processing enroll messages.
+    
+    if (registeredPerson == nil)
     {
         [gmiVC view];   // Force viewDidLoad.
         
-        [gmiVC noEnrollProcessing:TRUE];
-
         [gmiVC registerUser: trimmedString completion:^(GMIPerson *person) {
-            
-            NSLog(@"Person: %@", person);
             
             if (person)
             {
-                // Valid person, already registered or new user. Save the data for later access.
-                self->registeredPerson = person;                
-                NSString *uMessage = [NSString stringWithFormat:@"'%@' Registered", trimmedString];
-                UIAlertController *alertController = [UIAlertController
-                                                      alertControllerWithTitle:@"Success"
-                                                      message: uMessage
-                                                      preferredStyle:UIAlertControllerStyleAlert];
-                UIAlertAction *okAction = [UIAlertAction
-                                           actionWithTitle:@"OK"
-                                           style:UIAlertActionStyleDefault
-                                           handler:^(UIAlertAction *action)
-                                           {
-                                               [self dismissViewControllerAnimated:NO completion:nil];
-                                           }];
-                [alertController addAction:okAction];
+                UINavigationController *navControl = [[UINavigationController alloc] initWithRootViewController:self->gmiVC];
                 
-                [self presentViewController:alertController animated:YES completion:nil];
+                self->registeredPerson = person;
+                
+                [self->gmiVC setCurrentGmiPerson: self->registeredPerson];
+                
+                [self presentViewController:navControl animated:YES completion:nil];  // Present to validate email, process enrolls.
+                
+                [self.view setNeedsDisplay];
             }
-            else  // Unable to create user name (bad characters?)
-            {
-                [[NSUserDefaults standardUserDefaults] removeObjectForKey:VALID_USER];
-                
-                NSString *uMessage = [NSString stringWithFormat:@"Unable to create '%@'", trimmedString];
-                UIAlertController *alertController = [UIAlertController
-                                                      alertControllerWithTitle:@"Error"
-                                                      message: uMessage
-                                                      preferredStyle:UIAlertControllerStyleAlert];
-                UIAlertAction *okAction = [UIAlertAction
-                                           actionWithTitle:@"OK"
-                                           style:UIAlertActionStyleDefault
-                                           handler:^(UIAlertAction *action)
-                                           {
-                                               [self dismissViewControllerAnimated:NO completion:nil];
-                                           }];
-                [alertController addAction:okAction];
-                
-                [self presentViewController:alertController animated:YES completion:nil];
-            }
-        }];  // Only need to do once, unless re-enrolling.
-
+        }];
+        
     }
-    else  // Process enrolls.
+    else  // User previously registered in this session.
     {
-        
-        [gmiVC noEnrollProcessing:FALSE];
-        
-        if (registeredPerson == nil)
+        if (self->registeredPerson == nil)
         {
-            [gmiVC view];   // Force viewDidLoad.
-
-            [gmiVC registerUser: trimmedString completion:^(GMIPerson *person) {
-                
-                if (person)
-                {
-                    UINavigationController *navControl = [[UINavigationController alloc] initWithRootViewController:self->gmiVC];
-                    
-                    self->registeredPerson = person;
-                    
-                    [self->gmiVC setCurrentGmiPerson: self->registeredPerson];
-                    
-                    [self presentViewController:navControl animated:YES completion:nil];  // Present to validate email, process enrolls.
-                    
-                    [self.view setNeedsDisplay];
-                }
-            }];
-
+            [self showRegisterFirstDialog];
+            return;
         }
-        else  // User previously registered in this session.
-        {
-            if (self->registeredPerson == nil)
-            {
-                [self showRegisterFirstDialog];
-                return;
-            }
-            UINavigationController *navControl = [[UINavigationController alloc] initWithRootViewController:gmiVC];
-            [self->gmiVC setCurrentGmiPerson: self->registeredPerson];
-
-            [self presentViewController:navControl animated:YES completion:nil];  // Present to validate email, process enrolls.
-    
-            [self.view setNeedsDisplay];
-        }
+        UINavigationController *navControl = [[UINavigationController alloc] initWithRootViewController:gmiVC];
+        [self->gmiVC setCurrentGmiPerson: self->registeredPerson];
+        
+        [self presentViewController:navControl animated:YES completion:nil];  // Present to validate email, process enrolls.
+        
+        [self.view setNeedsDisplay];
     }
-
-}
+ }
 
 //
 //   keyboard is active.
@@ -262,7 +271,7 @@
     else
     {
         [[NSUserDefaults standardUserDefaults] removeObjectForKey:VALID_UUID];  // Could be new user, wipe out old info.
-        [self processUser:YES];  // Registering
+        [self processRegister];  // Registering
     }
 
 }
@@ -281,7 +290,7 @@
     }
     else
     {
-        [self processUser:NO];
+        [self processEnrolls];
     }
 }
 
@@ -305,6 +314,9 @@
 /*
     The verify request is generated from the server, and the message is process here.  The Callback OnMessageResponse
     signals when the user has completed message.  The confirmation is obtained from the server using the messageId.
+ 
+    You may want to check the enrollment messages first before processing the verify, so that any re-enroll messages
+    can be processed.  The app is responsible for determine the logic of enrollment message skipping or processing.
 */
 - (IBAction)verifyButtonAction:(id)sender
 {    

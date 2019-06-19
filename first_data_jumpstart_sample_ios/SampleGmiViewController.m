@@ -13,6 +13,9 @@
 //  You should also create usernames prior to running the application, as these values
 //  are required to identify individual users on the system.
 //
+//  The registration, enrollments, and verification are processed through the GMI SDK.
+//  Enroll and verification message templates are displayed via a GMI SDK method. Responses from
+//  the templates are handed in the callback OnMessageResponse.
 //
 //  Created by Henry Chan on 6/3/16.
 //  Copyright © 2017 ImageWare Systems, Inc. All rights reserved.
@@ -301,10 +304,6 @@
     // ===== INITALIZE the main library ===== //
     // No network calls are made. Sets up internal data only
     //
-    
- //   NSDictionary *plistDictionary = [NSDictionary dictionaryWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"endpoint" ofType:@"plist"]];
-
-  //   [[GMIClient sharedClient] startGMIWithDictionary: plistDictionary];
     
     [GMIClient startGMI: serverGMI withTenant:tenant withAppCode:appCode withClientCredentials:clientId withSecret:clientSecret];
     [[GMIClient sharedClient] setResponseDelegate:self]; // necessary to process OnMessageResponse.
@@ -909,6 +908,7 @@
         
         [[NSUserDefaults standardUserDefaults] setObject:validUUID forKey:VALID_UUID];
         
+        // Optional method to get a list of biometrics used for this user.
         [person loadAlgorithms:^(BOOL success){
             //
             NSArray *bioList = [person algorithms];
@@ -1239,7 +1239,7 @@
 
 }
 
--(void) enrollComplete
+-(void) enrollComplete:(BOOL) cancelled
 {
     if (enrollCount==0) // Check if already enrolled
     {
@@ -1250,9 +1250,10 @@
              //
              if(appDelegate.bioForPerson)
              {
-                 for (GMIAlgorithm *aItem in appDelegate.bioForPerson)
+                 for (GMIAlgorithm *aItem in appDelegate.bioForPerson)  // Available types.
                  {
  //                    if ([SampleGmiViewController enrolledCaptureType:aItem.captureType forPerson:appDelegate.thisPerson])
+                     if (cancelled==FALSE)
                      {
                          enrollCount++;  // Something already enrolled.
                      }
@@ -1263,14 +1264,16 @@
 //                if ([SampleGmiViewController enrolledCaptureType:MODALITY_STRING_FACE forPerson:appDelegate.thisPerson] ||
 //                    [SampleGmiViewController enrolledCaptureType:MODALITY_STRING_PASSPHRASE forPerson:appDelegate.thisPerson])
                  {
-                     enrollCount++;  // Something already enrolled.
+                     if (cancelled==FALSE)
+                         enrollCount++;  // Something already enrolled.
                  }
              }
          }
     }
     if ([SampleGmiViewController fingerprintEnabled])
     {
-        enrollCount++;  // Allow no biometrics, since fingerprint detected.
+        // If fingerprint allowed to access, increment enroll counter.
+//        enrollCount++;  // Allow no biometrics, since fingerprint detected.
     }
     else  // No fingerprint detected. Must enroll biometric to access.
     {
@@ -1296,8 +1299,8 @@
     }
     
     
-    NSString *title = self->enrollCount?@"Enroll Complete":@"Warning";
-    NSString *messageText = self->enrollCount?@"You can now use your biometrics to sign on":@"You are required to complete at least one biometric enrollment.";
+    NSString *title = (enrollCount>0)?@"Enroll Complete":@"Warning";
+    NSString *messageText = (enrollCount>0)?@"You can now use your biometrics to sign on":@"You are required to complete at least one biometric enrollment.";
     
     [self showAlertWithTitle:title withMessage:messageText];
     
@@ -1556,7 +1559,7 @@
             dispatch_async(dispatch_get_main_queue(), ^{
                  if ([self processGMIMessages] == FALSE)
                  {
-                    [self enrollComplete];
+                     [self enrollComplete:FALSE];
                  }
              });
          }
@@ -1607,7 +1610,7 @@
                             dispatch_async(dispatch_get_main_queue(), ^{
                                 if ([self processGMIMessages] == FALSE)
                                 {
-                                    [self enrollComplete];
+                                    [self enrollComplete:TRUE];
                                 }
                             });
                             return;
@@ -1653,7 +1656,7 @@
                                 // Try next enrollment.
                                      if ([self processGMIMessages] == FALSE) // We are done, no more enrollments.
                                     {
-                                        [self enrollComplete];
+                                        [self enrollComplete:FALSE];
                                     }
                                 });
                             }
