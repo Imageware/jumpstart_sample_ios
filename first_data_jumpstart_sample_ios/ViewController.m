@@ -333,7 +333,8 @@
     {
         gmiVC = [[SampleGmiViewController alloc] initWithCredentials:self.serverData withUserName:userName];
     }
-    
+    [gmiVC setUserName:userName];  // Allows enrolls to be processed.
+
     if (uuid==nil || registeredPerson == nil)
     {
         // Check if registered first.

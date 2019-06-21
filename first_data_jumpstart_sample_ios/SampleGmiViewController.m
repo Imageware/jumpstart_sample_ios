@@ -259,7 +259,10 @@
     [[NSUserDefaults standardUserDefaults] setObject:tName forKey:USER_KEY];
     [[NSUserDefaults standardUserDefaults] synchronize];
     userName = tName;
-    
+    if (messageId)
+    {
+        messageId = nil;   /// CLear from previous display
+    }
     onlyOnce = YES; // Allow registering user again.
 }
 
@@ -644,7 +647,7 @@
 {
     [self setUserName:userId];
 
-    [self view];   // Force viewDidLoad.
+    [self view];   // Force viewDidLoad, if not already loaded.
     
     [self noEnrollProcessing:TRUE];
 
@@ -855,9 +858,18 @@
         [self getEnrollsForPerson:person success:^(BOOL enrollsFound) {
             if (enrollsFound == NO)
             {
+                // Call verify after enroll completed.
+                if (self->verifyAfterEnroll && self->verifyComplete)
+                {
+                    [self completeVerification:self->verifyComplete];
+                    self->verifyAfterEnroll = FALSE;
+                    return;
+                }
                 NSString *messId = self->messageId;
                 if (messId==nil || messId.length<2)
                   [self dismissViewControllerAnimated:YES completion:nil];
+                
+                
             }
             else if (self->disabledEnrollProcessing==NO)
             {
@@ -1286,7 +1298,7 @@
 
     [[GMIClient sharedClient] renderMessage:message withNavController:self.navigationController withAnimation:NO withSuccess:localSuccessBlock withFailure:failureBlock];
  
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 2), dispatch_get_main_queue(), ^{
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 10 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
         //
         // Wait a few seconds for the global GMIHTMLViewController to initialize, then
         // use method to disable internal time.  If called too early, won't work.
@@ -1490,6 +1502,7 @@
             {
                 self->successBlock(messageId);  // Return the valid messageId, so we can get results from the server.
                 self->successBlock = nil;
+                self->messageId = nil;
             }
             // Need to notify verification complete.
             [self dismissViewControllerAnimated:YES completion:nil];
