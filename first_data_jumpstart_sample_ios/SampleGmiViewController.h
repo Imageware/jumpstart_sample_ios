@@ -2,8 +2,8 @@
 //  SampleGmiViewController.h
 //  Sample
 //
-//  Created by Henry Chan on 6/3/16.
-//  Copyright © 2017 ImageWare Systems, Inc. All rights reserved.
+//  Created by Henry Chan on 1/4/19.
+//  Copyright © 2019 ImageWare Systems, Inc. All rights reserved.
 //
 //  Calls via the GMI SDK.  Verfication and registartion are performed using the SDK view controller.
 //
@@ -51,11 +51,12 @@
 +(NSString *) getUserName;
 
 +(BOOL) fingerprintEnabled;  // Convenience check
-
+//
 // Enroll messages remain on server for each user until completed.
 // Possible to track if the user skipped (in OnMessageResponse) and not show that particular
 // biometric enrollment.  This gets more complex if multiple users are using the same app.
 // The folllowing methods allow tracking and supressing particular types.
+//
 +(void) suppressEnrollCaptureType: (NSString *) captureType;
 +(void) allowEnrollCaptureType: (NSString *) captureType;
 +(BOOL) skipEnrollCaptureType: (NSString *) captureType;

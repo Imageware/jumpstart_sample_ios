@@ -33,6 +33,8 @@
 //
 // ============= GMI server data =========
 //
+//  Server credentials usually have higher accesss rights, so these shouldn't be used on the client app.
+//
 +(NSDictionary *) serverCredentials
 {
     NSDictionary *serverDict = @{

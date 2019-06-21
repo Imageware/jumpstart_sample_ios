@@ -312,10 +312,10 @@
 }
 
 /*
-    The verify request is generated from the server, and the message is process here.  The Callback OnMessageResponse
+    The verify request is generated from the server, and the message is process via the GMI SDK.  The Callback OnMessageResponse
     signals when the user has completed message.  The confirmation is obtained from the server using the messageId.
  
-    You may want to check the enrollment messages first before processing the verify, so that any re-enroll messages
+    You may want to check the enrollment messages first before generating the verify message, so that any re-enroll messages
     can be processed.  The app is responsible for determine the logic of enrollment message skipping or processing.
 */
 - (IBAction)verifyButtonAction:(id)sender
@@ -329,13 +329,6 @@
 
     NSString *uuid = [[NSUserDefaults standardUserDefaults] objectForKey:VALID_UUID];
     
-    //
-    // Before processing the verification message, we should check to see if there are pending enrollments.
-    // Re-enroll will create a new enroll message that should be processed before a verification.
-    //
-    // Since all messages are processed in one routine, add the vericatioh message to the end of
-    // the message queue will allow enroll messages to be processed first.
-
     if (gmiVC == nil)
     {
         gmiVC = [[SampleGmiViewController alloc] initWithCredentials:self.serverData withUserName:userName];
@@ -373,9 +366,10 @@
         // Server call to generate verification message.  This will add the message to the processing queue.
         //
 
-        [self->gmiVC presentVerification:^(NSString *messageId){  // returns a valid messageId
-            
-            // Need to process after messages processed.
+        [self->gmiVC presentVerification:^(NSString *messageId){  // Calls server to generate message. Returns a valid messageId.
+            //
+            // Valid messageId indicxates success.
+            //
             if (messageId)
             {
                 // Verification message displayed.

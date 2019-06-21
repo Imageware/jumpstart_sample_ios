@@ -8,27 +8,19 @@
 //  1) Tenant ID
 //  2) Client ID
 //  3) Client Secret
-//  4) Push notification (for out-of-band applications)
-//
-//  You should also create usernames prior to running the application, as these values
-//  are required to identify individual users on the system.
 //
 //  The registration, enrollments, and verification are processed through the GMI SDK.
 //  Enroll and verification message templates are displayed via a GMI SDK method. Responses from
 //  the templates are handed in the callback OnMessageResponse.
 //
-//  Created by Henry Chan on 6/3/16.
-//  Copyright © 2017 ImageWare Systems, Inc. All rights reserved.
+//  Created by Henry Chan on 1/4/19.
+//  Copyright © 2019 ImageWare Systems, Inc. All rights reserved.
 //
 
 #import "AppDelegate.h"
 #import "GmiServerAccess.h"
 #import "SampleGmiViewController.h"
 #import <GMI/GMIHTMLViewController.h>
-
-//#import <GMI/GMIHTMLViewController.h>
-//#import <GMI/GMIResponseBuilder.h>
-//#import <GMI/GMIClient+Insider.h>
 
 #import <AudioToolbox/AudioToolbox.h>
 #import <LocalAuthentication/LocalAuthentication.h>  // For TouchID
@@ -40,7 +32,7 @@
     NSDictionary *serverCredentials;
     BOOL onlyOnce;
     UIView *waitingNotice;
-    NSMutableArray *gmiMessages;
+    NSMutableArray *gmiMessages;  // Array of GMIMessage
     NSInteger enrollCount;  // Track valid enrolls, so we can restrict certain combinations.
     GMIMessage *gmi_message;
     NSString *bearerToken;
@@ -61,6 +53,9 @@
 #define SKIPLIST  @"sampleSkipList"         // UserDefaults key for skipped enrollments
 
 
+//
+// Client credentials may differ from server credentials.
+//
 +(NSDictionary *) clientCredentials
 {
     NSDictionary *clientDict = @{
@@ -69,7 +64,7 @@
                                  CLIENT_SECRET : @"K311er$77",
                                  APP_CODE : @"authenticare",
                                  SERVER_NAME : @"https://deployment-gmi.iwsinc.com",  //"https://deployment-gmi.iwsinc.com"
-                                 CODED_64 :  @"ZmR1c2VyOkszMTFlciQ3Nw==="
+                                 CODED_64 :  @"ZmR1c2VyOkszMTFlciQ3Nw==="  // clientID:ClientSecret ===> 64baseEncodedValue
                                  };
 
     return clientDict;
@@ -645,8 +640,6 @@
 
 -(void) findUserId : (NSString *) userId success: (void (^)(GMIPerson *))foundPerson
 {
-    // CaN'T Call this yet.
-//    [[GMIClient sharedClient] getGMIPersonByUserId:userId success:^(GMIPerson *person) {
     [self setUserName:userId];
 
     [self view];   // Force viewDidLoad.
@@ -666,10 +659,7 @@
         } failure:^(GMIError *error) {
             foundPerson(nil);
         }];
-//         }  failure:^(GMIError *error) {
-//             foundPerson(nil);
-//    }] ;
-        
+    
     return;
 }
 
@@ -699,7 +689,7 @@
                 if ([peep.uuid isEqualToString: person.uuid]) {
                     personIsTied = YES;
                 }
-                else  // Clean all others.
+                else  // Option. Clean all others that were registered.
                 {
 //                  [[GMIClient sharedClient] unregisterApplicationForDeviceForPerson:peep success:nil failure:nil];
                 }
@@ -712,14 +702,6 @@
                 waitingForVerify = NO;  // Allow this method to be called again.
                 success();
             } else {
-#ifdef EMAIL_VETTING
-                // We can display a message that we are waiting for registration verification.
-                // For this sample, just recursive call again.
-                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 10 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
-                    waitingForVerify = NO;  // Allow this method to be called again.
-                    [self checkUserAndDeviceStatus:userId success:success];
-                });
- #else
             // Server will handle verification.
             [self hideWaiting];
             waitingForVerify = NO;
@@ -747,7 +729,7 @@
             }];
                 
             success();
-#endif
+
             }
         } failure:^(GMIError *error) {
             [self hideWaiting];
@@ -881,8 +863,6 @@
             }
         }];
     }];
-    
-    // If user is not verified,
 
 }
 
@@ -1081,8 +1061,6 @@
             // times, an email will be generated each time.
             //
             
-            // Do we need to do this if email vetting turned off, or do we need a server call to complete?
-            
             [[GMIClient sharedClient] registerDeviceWithUserId:self->userName success:^()
              {
                  // registered successful
@@ -1154,7 +1132,6 @@
        [gmiServer createUser:userId completion:^(NSString *tokenString){
            if (completion)
            {
-//               completion(tokenString);
                
                if (tokenString)
                {
@@ -1166,27 +1143,6 @@
            }
 
        }];
-
-       
-#ifdef NOUSER_DIALOG
-       DBG_Log(@"Username not found: %@", [error description]);
-       
-       UIAlertController *alertController = [UIAlertController
-                                             alertControllerWithTitle:@"Username Not found"
-                                             message: [NSString stringWithFormat:@"'%@'", self->userName]
-                                             preferredStyle:UIAlertControllerStyleAlert];
-       UIAlertAction *okAction = [UIAlertAction
-                                  actionWithTitle:@"OK"
-                                  style:UIAlertActionStyleDefault
-                                  handler:^(UIAlertAction *action)
-                                  {
-                                      [[self navigationController] popViewControllerAnimated:YES]; // UIAlertAction
-                                      [self dismissViewControllerAnimated:YES completion:nil];  // SampleGmiViewController
-                                 }];
-       [alertController addAction:okAction];
-       
-       [self presentViewController:alertController animated:YES completion:nil];
-#endif
        
    }];
         
@@ -1219,22 +1175,6 @@
     
     [self presentViewController:alertController animated:YES completion:^{
         NSLog(@"Presentation complete");
-        // Bug in UI, when app installed clean, this alert appears, then disappears.
-        // Leave the alert up for 10 seconds, then dismiss it.
-#ifdef NOMORE
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 10 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
-            if (alertController)
-            {
-                [self dismissViewControllerAnimated:NO completion:^{
-                    [self dismissViewControllerAnimated:YES completion:nil];  // Dismiss this view controller.
-                }];
-            }
-            else
-            {
-                [self dismissViewControllerAnimated:YES completion:nil];  // Dismiss this view controller.
-            }
-        });
-#endif
     }];
 
 }
@@ -1250,7 +1190,7 @@
              //
              if(appDelegate.bioForPerson)
              {
-                 for (GMIAlgorithm *aItem in appDelegate.bioForPerson)  // Available types.
+                 for (GMIAlgorithm *aItem in appDelegate.bioForPerson)  // Check for available types.
                  {
  //                    if ([SampleGmiViewController enrolledCaptureType:aItem.captureType forPerson:appDelegate.thisPerson])
                      if (cancelled==FALSE)
@@ -1498,8 +1438,6 @@
 //
 //  Get the message ID, then use that to get the original message (only for GMI messages)
 //
-//
-//  NOTE: Callback successBlock saved from
 - (void) onMessageResponse: (GMIResponse *) response
 {
     [SampleGmiViewController setOrientationAll];
@@ -1563,26 +1501,12 @@
                  }
              });
          }
-/*
-        if (self->successBlock)
-        {
-            self->successBlock(nil);
-            self->successBlock = nil;
-        }
-*/
         // else not valid, stay on template.
     }
     else // No bioData, so either cancelled or rejected.
     {
         // Template returned, no data.
         // This could occur if 'Back' button pressed, or validation rejected.
-/*
-        if (self->successBlock)
-        {
-            self->successBlock(nil);
-            self->successBlock = nil;
-        }
-*/
         
         if (dictData.count > 0 )
         {
