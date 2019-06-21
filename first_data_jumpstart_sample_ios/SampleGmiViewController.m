@@ -41,6 +41,8 @@
     AppDelegate *appDelegate;
     BOOL disabledEnrollProcessing;
     GMIPerson *thisGMIPerson;
+    BOOL verifyAfterEnroll;  // default false
+    void (^verifyComplete)(NSString *returnMessId);
 }
 @end
 
@@ -1239,6 +1241,14 @@
     }
     
     
+    // Call verify after enroll completed.
+    if (verifyAfterEnroll && verifyComplete)
+    {
+        [self completeVerification:verifyComplete];
+        verifyAfterEnroll = FALSE;
+        return;
+    }
+    
     NSString *title = (enrollCount>0)?@"Enroll Complete":@"Warning";
     NSString *messageText = (enrollCount>0)?@"You can now use your biometrics to sign on":@"You are required to complete at least one biometric enrollment.";
     
@@ -1606,18 +1616,26 @@
 }
 
 
+#pragma mark - Enroll Verify
+
 //
 //  The completion block is saved in the successBlock to be called AFTER the user responses
 //  to the verification message in the GMI callback OnMessageResponse.
 //
+
 -(void) presentVerification:(void (^)(NSString *returnMessId)) completion
+{
+    verifyAfterEnroll = TRUE;
+    verifyComplete = completion;
+}
+
+-(void) completeVerification:(void (^)(NSString *returnMessId)) completion
 {
     NSString *uuid = [[NSUserDefaults standardUserDefaults] objectForKey:VALID_UUID];
     
     GmiServerAccess *gmiServer = [[GmiServerAccess alloc] init];
     NSDictionary *serverInfo = [GmiServerAccess serverCredentials];
     __block NSString *bearToken;
-    
     
     [[GMIClient sharedClient] getGMIPersonByUUID:uuid success:^(GMIPerson *person) {
         GMIPerson *thisPerson = person;
@@ -1626,6 +1644,10 @@
             // Token is set internal.
             bearToken = bToken;
         }];
+        
+        // Before creating verify message, should check for enrolls.
+        
+        
         
         //
         // No Need to pass in token, already set in library.

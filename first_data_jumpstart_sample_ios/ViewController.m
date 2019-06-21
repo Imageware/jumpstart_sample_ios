@@ -315,7 +315,7 @@
     The verify request is generated from the server, and the message is process via the GMI SDK.  The Callback OnMessageResponse
     signals when the user has completed message.  The confirmation is obtained from the server using the messageId.
  
-    You may want to check the enrollment messages first before generating the verify message, so that any re-enroll messages
+    Enrollment messages are checked first before generating the verify message, so that any re-enroll messages
     can be processed.  The app is responsible for determine the logic of enrollment message skipping or processing.
 */
 - (IBAction)verifyButtonAction:(id)sender
@@ -333,7 +333,6 @@
     {
         gmiVC = [[SampleGmiViewController alloc] initWithCredentials:self.serverData withUserName:userName];
     }
-    
     
     if (uuid==nil || registeredPerson == nil)
     {
@@ -355,7 +354,7 @@
         return;
     }
     
-    [gmiVC noEnrollProcessing:TRUE];
+    [gmiVC noEnrollProcessing:FALSE];
     [gmiVC setCurrentGmiPerson: registeredPerson];
 
     
