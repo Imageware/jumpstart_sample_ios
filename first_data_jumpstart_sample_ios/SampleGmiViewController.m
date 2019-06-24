@@ -261,7 +261,7 @@
     userName = tName;
     if (messageId)
     {
-        messageId = nil;   /// CLear from previous display
+        messageId = nil;   /// Clear from previous display
     }
     onlyOnce = YES; // Allow registering user again.
 }
@@ -1681,14 +1681,16 @@
                     }
                     
                    [self setMessageIdentifier:thisMessageId];
-                    
+                    //
+                    // Re-enroll message must be pulled from the server. Use the messageId to get a reference to the actual message.
+                    //
                     [[GMIClient sharedClient] getMessage:thisMessageId forPerson:thisPerson success:^(GMIMessage *message) {
   
                         if (self->gmiMessages==nil)
                         {
                             self->gmiMessages = [[NSMutableArray alloc] initWithCapacity:3];
                         }
-                        [self->gmiMessages addObject:message];
+                        [self->gmiMessages addObject:message];  // Add to processing queue.
                         
                         
                         dispatch_async(dispatch_get_main_queue(), ^{

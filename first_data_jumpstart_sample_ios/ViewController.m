@@ -363,12 +363,13 @@
     
     [self presentViewController:navControl animated:YES completion:^{
         //
-        // Server call to generate verification message.  This will add the message to the processing queue.
+        // Check for enrollment (or re-enrollment) message first before using
+        // server call to generate verification message.  This will add the message to the processing queue.
         //
 
         [self->gmiVC presentVerification:^(NSString *messageId){  // Calls server to generate message. Returns a valid messageId.
             //
-            // Valid messageId indicxates success.
+            // Valid messageId indicates success.  Cancel will dismiss the VC, will never get here.
             //
             if (messageId)
             {
