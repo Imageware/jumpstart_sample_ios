@@ -1298,13 +1298,18 @@
 
     [[GMIClient sharedClient] renderMessage:message withNavController:self.navigationController withAnimation:NO withSuccess:localSuccessBlock withFailure:failureBlock];
  
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 10 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
-        //
-        // Wait a few seconds for the global GMIHTMLViewController to initialize, then
-        // use method to disable internal time.  If called too early, won't work.
-        //
-        [GMIHTMLViewController cancelBiometricsAttempt];  // Disable internal 30 second timer.
-    });
+    // Only disable timer on verify templates
+    if ([message.templateName containsString:@"ENROLL"]==FALSE)
+    {
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 10 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+            //
+            // Wait a few seconds for the global GMIHTMLViewController to initialize, then
+            // use method to disable internal time.  If called too early, won't work.
+            //
+            [GMIHTMLViewController cancelBiometricsAttempt];  // Disable internal 30 second timer.
+        });
+        
+    }
 
     NSLog(@"Done presentation");
     
