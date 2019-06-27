@@ -276,6 +276,22 @@
     if (self = [super init]) {
         serverCredentials = dictData;
         userName = uName;
+        //serverCredentials
+        NSString *tenant = serverCredentials[TENANT_NAME];          // Tenant name on server
+        NSString *clientId = serverCredentials[CLIENT_ID];          // Unique ID
+        NSString *clientSecret = serverCredentials[CLIENT_SECRET];  // Secret used for oauth verification
+        NSString *appCode = serverCredentials[APP_CODE];            // Set in the admin portal. Default "GoVerifyID"
+        NSString *serverName = serverCredentials[SERVER_NAME];  // This normally won't change unless you are using your own server.
+        
+        NSString *serverGMI = [NSString stringWithFormat:@"%@/gmiserver/", serverName];
+        
+        //
+        // ===== INITALIZE the main library ===== //
+        // No network calls are made. Sets up internal data only
+        //
+        
+        [GMIClient startGMI: serverGMI withTenant:tenant withAppCode:appCode withClientCredentials:clientId withSecret:clientSecret];
+        [[GMIClient sharedClient] setResponseDelegate:self]; // necessary to process OnMessageResponse.
     }
     return self;
 }
@@ -288,26 +304,6 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    // Do any additional setup after loading the view.
-    //
-    
-    //serverCredentials
-    NSString *tenant = serverCredentials[TENANT_NAME];          // Tenant name on server
-    NSString *clientId = serverCredentials[CLIENT_ID];          // Unique ID
-    NSString *clientSecret = serverCredentials[CLIENT_SECRET];  // Secret used for oauth verification
-    NSString *appCode = serverCredentials[APP_CODE];            // Set in the admin portal. Default "GoVerifyID"
-    NSString *serverName = serverCredentials[SERVER_NAME];  // This normally won't change unless you are using your own server.
-    
-    NSString *serverGMI = [NSString stringWithFormat:@"%@/gmiserver/", serverName];
-    
-    //
-    // ===== INITALIZE the main library ===== //
-    // No network calls are made. Sets up internal data only
-    //
-    
-    [GMIClient startGMI: serverGMI withTenant:tenant withAppCode:appCode withClientCredentials:clientId withSecret:clientSecret];
-    [[GMIClient sharedClient] setResponseDelegate:self]; // necessary to process OnMessageResponse.
-
     onlyOnce = YES;
     userName = nil;
     appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
@@ -696,7 +692,7 @@
                 }
                 else  // Option. Clean all others that were registered.
                 {
-//                  [[GMIClient sharedClient] unregisterApplicationForDeviceForPerson:peep success:nil failure:nil];
+                  [[GMIClient sharedClient] unregisterApplicationForDeviceForPerson:peep success:nil failure:nil];
                 }
             }
             
@@ -861,7 +857,10 @@
                 // Call verify after enroll completed.
                 if (self->verifyAfterEnroll && self->verifyComplete)
                 {
-                    [self completeVerification:self->verifyComplete];
+                    // Need to wait to allow server to store message.
+                    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 2 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+                        [self completeVerification:self->verifyComplete];
+                    });
                     self->verifyAfterEnroll = FALSE;
                     return;
                 }
@@ -1256,7 +1255,10 @@
     // Call verify after enroll completed.
     if (verifyAfterEnroll && verifyComplete)
     {
-        [self completeVerification:verifyComplete];
+        // Need to wait to allow server to store message.
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 2 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+            [self completeVerification:self->verifyComplete];
+        });
         verifyAfterEnroll = FALSE;
         return;
     }
@@ -1284,28 +1286,35 @@
     
     void (^localSuccessBlock)(void) = ^(void) {
         // Called after selection choice (voice)
-        NSLog(@"success");
-    };
+        NSLog(@"success render");
+     };
 
     
     
     void (^failureBlock)(GMIError*) = ^(GMIError *error) {
-        NSLog(@"failed");
+        NSLog(@"failed render");
         [SampleGmiViewController setOrientationAll];
     };
 
     [SampleGmiViewController setOrientationPortrait];
 
-    
-    [[GMIClient sharedClient] renderMessage:message withNavController:self.navigationController withAnimation:NO withSuccess:localSuccessBlock withFailure:failureBlock];
- 
+//    self.navigationController.navigationBarHidden = YES;
+
+    [[GMIClient sharedClient] renderMessage:message withNavController:self.navigationController withAnimation:TRUE withSuccess:localSuccessBlock withFailure:failureBlock];
+
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 10 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
         //
         // Wait a few seconds for the global GMIHTMLViewController to initialize, then
         // use method to disable internal timer.  If called too early, won't work.
         //
         UIWebView *thisWebView = [GMIHTMLViewController currentInstance].webView;
-        [thisWebView.delegate webViewDidFinishLoad:thisWebView];  // Side effect disables internal timer.
+        if (thisWebView)
+        {
+            if ([thisWebView.delegate respondsToSelector:@selector(webViewDidFinishLoad:)])
+            {
+                [thisWebView.delegate webViewDidFinishLoad:thisWebView];  // Side effect disables internal timer.
+            }
+        }
     });
 
     NSLog(@"Done presentation");
@@ -1565,6 +1574,14 @@
                             return;
                         }
                     }
+                }
+                else if ([extraString containsString:@"Back event"])
+                {
+                    if (gmi_message)
+                    {
+                        [self dismissViewControllerAnimated:NO completion:nil];
+                    }
+                    return;
                 }
             }
             if ([eventString compare:gmiresp_event_MessageAbandoned] == NSOrderedSame)
