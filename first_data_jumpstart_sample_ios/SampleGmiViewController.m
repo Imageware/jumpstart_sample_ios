@@ -1312,7 +1312,7 @@
         {
             if ([thisWebView.delegate respondsToSelector:@selector(webViewDidFinishLoad:)])
             {
-                [thisWebView.delegate webViewDidFinishLoad:thisWebView];  // Side effect disables internal timer.
+               [thisWebView.delegate webViewDidFinishLoad:thisWebView];  // Side effect disables internal timer.
             }
         }
     });
@@ -1559,8 +1559,9 @@
                     {
                         extraDictionary = json;
                         NSString *extraMessage = [extraDictionary objectForKey:@"data"];
+                        BOOL isVerify = [extraMessage containsString:@"verification"];
                         
-                        if ([extraMessage containsString:@"cancelled"])
+                        if ([extraMessage containsString:@"cancelled"] && isVerify==FALSE)
                         {
                             [self skipCurrentEnroll];
                             // Is there another enroll message to process?
@@ -1571,6 +1572,11 @@
                                     [self enrollComplete:TRUE];
                                 }
                             });
+                            return;
+                        }
+                        else  // Verify reject
+                        {
+                            [self dismissViewControllerAnimated:YES completion:nil];
                             return;
                         }
                     }
