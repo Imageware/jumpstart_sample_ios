@@ -38,12 +38,11 @@
 +(NSDictionary *) serverCredentials
 {
     NSDictionary *serverDict = @{
-                                 TENANT_NAME : @"fdata",
-                                 CLIENT_ID : @"fdadmin",
-                                 CLIENT_SECRET : @"p3AQlzCdJDIt",
-                                 APP_CODE : @"authenticare",
-                                 SERVER_NAME : @"https://deployment-gmi.iwsinc.com",  //"https://deployment-gmi.iwsinc.com"
-                                 CODED_64 :  @"ZmRhZG1pbjpwM0FRbHpDZEpESXQ="  // clientID:ClientSecret ===> 64baseEncodedValue
+                                 TENANT_NAME : @"TENANT_NAME_HERE",
+                                 CLIENT_ID : @"TENANT_ADMIN_CLIENT_ID_HERE",
+                                 CLIENT_SECRET : @"TENANT_ADMIN_CLIENT_SECRET_HERE",
+                                 APP_CODE : @"APP_CODE_HERE",
+                                 SERVER_NAME : @"SERVER_URL_HERE"
                                  };
     
     return serverDict;
@@ -62,13 +61,9 @@
         return;
     }
     serverData = userData;
-    NSString *secret64 = userData[CODED_64];
-    if (secret64==nil)  // If no value, manually encode.
-    {
-        NSString *encodeValue = [NSString stringWithFormat:@"%@:%@", userData[CLIENT_ID], userData[CLIENT_SECRET]];
-        NSData *dataValue = [encodeValue dataUsingEncoding:NSUTF8StringEncoding];
-        secret64 = [dataValue base64EncodedStringWithOptions:NSDataBase64Encoding64CharacterLineLength];
-    }
+    NSString *encodeValue = [NSString stringWithFormat:@"%@:%@", userData[CLIENT_ID], userData[CLIENT_SECRET]];
+    NSData *dataValue = [encodeValue dataUsingEncoding:NSUTF8StringEncoding];
+    NSString *secret64 = [dataValue base64EncodedStringWithOptions:NSDataBase64Encoding64CharacterLineLength];
     NSString *serverURL = userData[SERVER_NAME];
     NSString *authorizationString = [NSString stringWithFormat:@"Basic %@", secret64];
     NSDictionary *headers = @{ @"authorization": authorizationString,

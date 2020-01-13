@@ -61,13 +61,12 @@
 +(NSDictionary *) clientCredentials
 {
     NSDictionary *clientDict = @{
-                                 TENANT_NAME : @"fdata",
-                                 CLIENT_ID : @"fduser",
-                                 CLIENT_SECRET : @"K311er$77",
-                                 APP_CODE : @"authenticare",
-                                 SERVER_NAME : @"https://deployment-gmi.iwsinc.com",  //"https://deployment-gmi.iwsinc.com"
-                                 CODED_64 :  @"ZmR1c2VyOkszMTFlciQ3Nw==="  // clientID:ClientSecret ===> 64baseEncodedValue
-                                 };
+                                 TENANT_NAME : @"TENANT_NAME_HERE",
+                                 CLIENT_ID : @"MOBILE_CLIENT_ID_HERE",
+                                 CLIENT_SECRET : @"MOBILE_CLIENT_SECRET_HERE",
+                                 APP_CODE : @"APP_CODE_HERE",
+                                 SERVER_NAME : @"SERVER_URL_HERE"
+    };
 
     return clientDict;
 }
