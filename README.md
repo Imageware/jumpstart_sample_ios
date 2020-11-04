@@ -1,1 +1,0 @@
-Once you clone this repo or download the ZIP file, please do a find-in-files for ```PLEASE_LOOK_FOR_CREDENTIALS_AND_CONFIGURATION``` in the source code and replace with configuration provided to you separately by your ImageWare contact.
