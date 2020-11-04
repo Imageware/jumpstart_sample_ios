@@ -9,21 +9,23 @@
 /* Begin PBXBuildFile section */
 		19DE29542552336500370CE1 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19DE29532552336500370CE1 /* AppDelegate.swift */; };
 		19DE29562552336500370CE1 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19DE29552552336500370CE1 /* SceneDelegate.swift */; };
-		19DE29582552336500370CE1 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19DE29572552336500370CE1 /* ContentView.swift */; };
+		19DE29582552336500370CE1 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19DE29572552336500370CE1 /* MainView.swift */; };
 		19DE295A2552336800370CE1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 19DE29592552336800370CE1 /* Assets.xcassets */; };
 		19DE295D2552336800370CE1 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 19DE295C2552336800370CE1 /* Preview Assets.xcassets */; };
 		19DE29602552336800370CE1 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 19DE295E2552336800370CE1 /* LaunchScreen.storyboard */; };
+		19DE296A25530F0A00370CE1 /* MainViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19DE296925530F0A00370CE1 /* MainViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		19DE29502552336500370CE1 /* gmi_ios_sample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = gmi_ios_sample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		19DE29532552336500370CE1 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		19DE29552552336500370CE1 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		19DE29572552336500370CE1 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		19DE29572552336500370CE1 /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
 		19DE29592552336800370CE1 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		19DE295C2552336800370CE1 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		19DE295F2552336800370CE1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		19DE29612552336800370CE1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		19DE296925530F0A00370CE1 /* MainViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,7 +60,7 @@
 			children = (
 				19DE29532552336500370CE1 /* AppDelegate.swift */,
 				19DE29552552336500370CE1 /* SceneDelegate.swift */,
-				19DE29572552336500370CE1 /* ContentView.swift */,
+				19DE296825530EDE00370CE1 /* Main */,
 				19DE29592552336800370CE1 /* Assets.xcassets */,
 				19DE295E2552336800370CE1 /* LaunchScreen.storyboard */,
 				19DE29612552336800370CE1 /* Info.plist */,
@@ -73,6 +75,15 @@
 				19DE295C2552336800370CE1 /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		19DE296825530EDE00370CE1 /* Main */ = {
+			isa = PBXGroup;
+			children = (
+				19DE29572552336500370CE1 /* MainView.swift */,
+				19DE296925530F0A00370CE1 /* MainViewModel.swift */,
+			);
+			path = Main;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -147,7 +158,8 @@
 			files = (
 				19DE29542552336500370CE1 /* AppDelegate.swift in Sources */,
 				19DE29562552336500370CE1 /* SceneDelegate.swift in Sources */,
-				19DE29582552336500370CE1 /* ContentView.swift in Sources */,
+				19DE29582552336500370CE1 /* MainView.swift in Sources */,
+				19DE296A25530F0A00370CE1 /* MainViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
