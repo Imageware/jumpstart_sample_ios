@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		19CFA0DD25536EE800013A8E /* GMI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 19DE2973255310AD00370CE1 /* GMI.framework */; };
+		19CFA0DE25536EE800013A8E /* GMI.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 19DE2973255310AD00370CE1 /* GMI.framework */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		19DE29542552336500370CE1 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19DE29532552336500370CE1 /* AppDelegate.swift */; };
 		19DE29562552336500370CE1 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19DE29552552336500370CE1 /* SceneDelegate.swift */; };
 		19DE29582552336500370CE1 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19DE29572552336500370CE1 /* MainView.swift */; };
@@ -15,6 +17,20 @@
 		19DE29602552336800370CE1 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 19DE295E2552336800370CE1 /* LaunchScreen.storyboard */; };
 		19DE296A25530F0A00370CE1 /* MainViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19DE296925530F0A00370CE1 /* MainViewModel.swift */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		19CFA0DF25536EE800013A8E /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				19CFA0DE25536EE800013A8E /* GMI.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		19DE29502552336500370CE1 /* gmi_ios_sample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = gmi_ios_sample.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -26,6 +42,7 @@
 		19DE295F2552336800370CE1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		19DE29612552336800370CE1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		19DE296925530F0A00370CE1 /* MainViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewModel.swift; sourceTree = "<group>"; };
+		19DE2973255310AD00370CE1 /* GMI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = GMI.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -33,6 +50,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				19CFA0DD25536EE800013A8E /* GMI.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -43,6 +61,7 @@
 			isa = PBXGroup;
 			children = (
 				19DE29522552336500370CE1 /* gmi_ios_sample */,
+				19DE296E2553107500370CE1 /* Frameworks */,
 				19DE29512552336500370CE1 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -86,6 +105,14 @@
 			path = Main;
 			sourceTree = "<group>";
 		};
+		19DE296E2553107500370CE1 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				19DE2973255310AD00370CE1 /* GMI.framework */,
+			);
+			path = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -96,6 +123,7 @@
 				19DE294C2552336500370CE1 /* Sources */,
 				19DE294D2552336500370CE1 /* Frameworks */,
 				19DE294E2552336500370CE1 /* Resources */,
+				19CFA0DF25536EE800013A8E /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -301,7 +329,13 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"gmi_ios_sample/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Frameworks/GMI.framework/Frameworks",
+					"$(PROJECT_DIR)/Frameworks",
+				);
 				INFOPLIST_FILE = gmi_ios_sample/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -321,7 +355,13 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"gmi_ios_sample/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Frameworks/GMI.framework/Frameworks",
+					"$(PROJECT_DIR)/Frameworks",
+				);
 				INFOPLIST_FILE = gmi_ios_sample/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
