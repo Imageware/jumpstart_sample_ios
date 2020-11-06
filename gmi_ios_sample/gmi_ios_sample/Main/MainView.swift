@@ -35,19 +35,16 @@ struct MainView: View {
                 TextField("GMI Application Code", text: self.$viewModel.applicationCode)
             }
             
-            Button(action: { }) { Text("Initialize GMI SDK") }
+            Button(action: { viewModel.initializeSDK() }) { Text("Initialize GMI SDK") }
             
             Section(header: Text("Email / User ID")) {
-                TextField("ExampleCode", text: self.$viewModel.email)
+                TextField("email", text: self.$viewModel.email)
             }
             
             Button(action: { viewModel.checkEmail() }) { Text("Check Email") }
-            
-            Button(action: { }) { Text("Register User") }
-            
-//            Button(action: { }) { Text("Syncronize pending enrolls and alerts") }
-//            
-//            Button(action: { }) { Text("Perform next expected item") }
+            Button(action: { viewModel.registerUser() }) { Text("Register User") }
+            Button(action: { viewModel.syncronize() }) { Text("Syncronize and run first expected item") }
+            Button(action: { viewModel.countPendingAlertsAndEnrolls() }) { Text("Count of pending alerts and enrolls") }
         }.alert(isPresented: self.$viewModel.showingAlert) {
             Alert(title: Text("Message"), message: Text(self.viewModel.alertTitle), dismissButton: .default(Text("Dismiss")))
         }
