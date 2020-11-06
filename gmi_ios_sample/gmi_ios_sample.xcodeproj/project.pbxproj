@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		19CFA0DD25536EE800013A8E /* GMI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 19DE2973255310AD00370CE1 /* GMI.framework */; };
-		19CFA0DE25536EE800013A8E /* GMI.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 19DE2973255310AD00370CE1 /* GMI.framework */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		19CFA0DE25536EE800013A8E /* GMI.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 19DE2973255310AD00370CE1 /* GMI.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		19DE29542552336500370CE1 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19DE29532552336500370CE1 /* AppDelegate.swift */; };
 		19DE29562552336500370CE1 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19DE29552552336500370CE1 /* SceneDelegate.swift */; };
 		19DE29582552336500370CE1 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19DE29572552336500370CE1 /* MainView.swift */; };
@@ -331,7 +331,6 @@
 				ENABLE_PREVIEWS = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/Frameworks/GMI.framework/Frameworks",
 					"$(PROJECT_DIR)/Frameworks",
 				);
 				INFOPLIST_FILE = gmi_ios_sample/Info.plist;
@@ -357,7 +356,6 @@
 				ENABLE_PREVIEWS = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/Frameworks/GMI.framework/Frameworks",
 					"$(PROJECT_DIR)/Frameworks",
 				);
 				INFOPLIST_FILE = gmi_ios_sample/Info.plist;
