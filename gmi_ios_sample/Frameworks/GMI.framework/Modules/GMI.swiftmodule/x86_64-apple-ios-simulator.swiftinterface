@@ -1,0 +1,829 @@
+// swift-interface-format-version: 1.0
+// swift-compiler-version: Apple Swift version 5.3 (swiftlang-1200.0.29.2 clang-1200.0.30.1)
+// swift-module-flags: -target x86_64-apple-ios13.0-simulator -enable-objc-interop -enable-library-evolution -swift-version 5 -enforce-exclusivity=checked -Onone -module-name GMI
+import AVFoundation
+import Foundation
+@_exported import GMI
+import IWS_Shared_Components
+import LocalAuthentication
+import Realm
+import RealmSwift
+import Security
+import Swift
+import UIKit
+@objc @_inheritsConvenienceInitializers open class TutorialViewController : GMI.OnboardingViewController, UIKit.UIGestureRecognizerDelegate {
+  public func setViews(from captureType: GMI.CaptureType, mapGetStartedButton: Swift.Bool)
+  public func setViews(from captureable: GMI.Capturable, mapGetStartedButton: Swift.Bool)
+  public func setViewControllers(storyboard: UIKit.UIStoryboard, viewControllers: [Swift.String], mapGetStartedButton: Swift.Bool)
+  @objc override dynamic public func viewDidLoad()
+  @objc override dynamic public func viewDidAppear(_ animated: Swift.Bool)
+  @objc override dynamic public func viewDidDisappear(_ animated: Swift.Bool)
+  @objc deinit
+  @objc override dynamic public init(transitionStyle style: UIKit.UIPageViewController.TransitionStyle, navigationOrientation: UIKit.UIPageViewController.NavigationOrientation, options: [UIKit.UIPageViewController.OptionsKey : Any]? = nil)
+  @objc required dynamic public init?(coder: Foundation.NSCoder)
+}
+@_inheritsConvenienceInitializers @objc public class Capturable : GMI.Model {
+  @objc dynamic public var hidden: Foundation.Date?
+  @objc dynamic public var skipped: Foundation.Date?
+  public var captureType: GMI.CaptureType? {
+    get
+    set(newValue)
+  }
+  @objc dynamic public var account: GMI.Account?
+  public enum Modality : Swift.String {
+    case verify
+    case enroll
+    public typealias RawValue = Swift.String
+    public init?(rawValue: Swift.String)
+    public var rawValue: Swift.String {
+      get
+    }
+  }
+  @objc deinit
+  @objc required dynamic public init()
+}
+@_hasMissingDesignatedInitializers public class Person : Swift.Decodable {
+  public var id: Swift.String?
+  public var email: Swift.String?
+  public var enrollServer: Swift.String?
+  public var tenantEnrollServer: Swift.String?
+  public var tenantVerifyServer: Swift.String?
+  public var verifyServer: Swift.String?
+  @objc deinit
+  required public init(from decoder: Swift.Decoder) throws
+}
+@_hasMissingDesignatedInitializers public class data : Swift.Decodable {
+  @objc deinit
+  required public init(from decoder: Swift.Decoder) throws
+}
+@_hasMissingDesignatedInitializers public class biometricMetadata : Swift.Decodable {
+  @objc deinit
+  required public init(from decoder: Swift.Decoder) throws
+}
+@objc public protocol DatabaseManager {
+  @objc func delete(_ object: GMI.Model)
+  @objc func delete(_ object: GMI.Model, completion: (() -> ())?)
+  @objc func persist(object: GMI.Model)
+  @objc func persist(object: GMI.Model, completion: (Swift.Bool) -> ())
+  @objc func write(_ writeBlock: () -> ())
+  @objc func write(_ writeBlock: () -> (), completion: (() -> ())?)
+  @objc func enrolls() -> [GMI.Enroll]
+  @objc func enrolls(_ completion: @escaping ([GMI.Enroll]) -> ())
+  @objc func activeEnrolls() -> [GMI.Enroll]
+  @objc func alerts() -> [GMI.Message]
+  @objc func alerts(_ completion: @escaping ([GMI.Message]) -> ())
+  @objc func unreadAlerts() -> [GMI.Message]
+  @objc func unreadAlerts(_ completion: @escaping ([GMI.Message]) -> ())
+  @objc func activeAlerts() -> [GMI.Message]
+  @objc func appState() -> GMI.AppState
+  @objc func accounts() -> [GMI.Account]
+  @objc func accounts(_ completion: @escaping ([GMI.Account]) -> ())
+}
+public protocol DatabaseNotificationToken {
+}
+public protocol DatabaseManagerObservable {
+  func observeChanges<T>(object: T.Type, notifyBlock: @escaping (GMI.DatabaseManager) -> Swift.Void) -> GMI.DatabaseNotificationToken? where T : GMI.Model
+}
+extension RLMNotificationToken : GMI.DatabaseNotificationToken {
+}
+@_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers @objc public class RealmDatabaseManager : ObjectiveC.NSObject, GMI.DatabaseManager {
+  @objc public func delete(_ object: GMI.Model)
+  @objc public func delete(_ object: GMI.Model, completion: (() -> ())?)
+  @objc public func persist(object: GMI.Model)
+  @objc public func persist(object: GMI.Model, completion: (Swift.Bool) -> ())
+  @objc public func write(_ writeBlock: () -> ())
+  @objc public func write(_ writeBlock: () -> (), completion: (() -> ())?)
+  @objc public func enrolls() -> [GMI.Enroll]
+  @objc public func enrolls(_ completion: @escaping ([GMI.Enroll]) -> ())
+  @objc public func activeEnrolls() -> [GMI.Enroll]
+  @objc public func alerts() -> [GMI.Message]
+  @objc public func alerts(_ completion: @escaping ([GMI.Message]) -> ())
+  @objc public func unreadAlerts() -> [GMI.Message]
+  @objc public func unreadAlerts(_ completion: @escaping ([GMI.Message]) -> ())
+  @objc public func activeAlerts() -> [GMI.Message]
+  @objc public func accounts() -> [GMI.Account]
+  @objc public func accounts(_ completion: @escaping ([GMI.Account]) -> ())
+  @objc public func appState() -> GMI.AppState
+  @objc deinit
+}
+extension RealmDatabaseManager : GMI.DatabaseManagerObservable {
+  public func observeChanges<T>(object: T.Type, notifyBlock: @escaping (GMI.DatabaseManager) -> Swift.Void) -> GMI.DatabaseNotificationToken? where T : GMI.Model
+}
+extension UICollectionViewCell {
+  public static var reusableIdentifier: Swift.String {
+    get
+  }
+}
+public protocol DeviceServiceManagerProtocol {
+  func registerDevice(account: GMI.Account, persistUser: Swift.Bool, completion: @escaping (GMI.GMIResponse<Swift.Void>) -> ())
+  func personForEmail(account: GMI.Account, completion: @escaping (GMI.GMIResponse<GMI.Person>) -> ())
+  func peopleForDeviceId(account: GMI.Account, completion: @escaping (GMI.GMIResponse<[GMI.Person]>) -> ())
+  func deletePersonForDeviceId(account: GMI.Account, completion: @escaping (GMI.GMIResponse<Swift.Void>) -> ())
+}
+public class DeviceServiceManager : GMI.DeviceServiceManagerProtocol {
+  public init(database: GMI.DatabaseManager = Instance.shared.databaseManager, restManager: GMI.RESTManager = Instance.shared.restManager)
+  public func registerDevice(account: GMI.Account, persistUser: Swift.Bool, completion: @escaping (GMI.GMIResponse<Swift.Void>) -> ())
+  public func personForEmail(account: GMI.Account, completion: @escaping (GMI.GMIResponse<GMI.Person>) -> ())
+  public func peopleForDeviceId(account: GMI.Account, completion: @escaping (GMI.GMIResponse<[GMI.Person]>) -> ())
+  public func deletePersonForDeviceId(account: GMI.Account, completion: @escaping (GMI.GMIResponse<Swift.Void>) -> ())
+  @objc deinit
+}
+@objc public class CaptureFlowManager : ObjectiveC.NSObject {
+  public var currentCaptureFlow: GMI.CaptureFlow?
+  final public let captureManager: GMI.CaptureManager
+  public var databaseManager: GMI.DatabaseManager
+  public init(databaseManager: GMI.DatabaseManager)
+  public func resetCurrent()
+  public func nextExpectedEnrollment() -> GMI.Enroll?
+  public func nextQueueItem() -> GMI.Message?
+  public func nextUnreadQueueItem() -> GMI.Message?
+  public func isOkayToBeginCaptureFlow() -> Swift.Bool
+  public func beginCaptureFlow(captureFlow: GMI.CaptureFlow)
+  @objc deinit
+  @objc override dynamic public init()
+}
+public protocol CaptureFlowServiceManagerProtocol {
+  func markAsRead(message: GMI.Message, completion: @escaping (GMI.GMIResponse<Swift.Void>) -> ())
+  func reject(message: GMI.Message, completion: @escaping (GMI.GMIResponse<Swift.Void>) -> ())
+  func upload(captureable: GMI.Capturable, captureProbes: [GMI.CaptureType : [GMI.CaptureProbe]], completion: @escaping (GMI.GMIResponse<Swift.Bool>) -> ())
+}
+@objc public class CaptureableUploadResponse : GMI.Model, Swift.Decodable {
+  @objc deinit
+  required public init(from decoder: Swift.Decoder) throws
+}
+extension UIApplication {
+  @discardableResult
+  public func openSettings() -> Swift.Bool
+}
+public protocol Logger {
+  func info(_ object: Any?)
+  func error(_ string: Swift.String?)
+  func error(_ error: Swift.Error?)
+  func debug(_ object: Any?)
+  func warning(_ string: Swift.String?)
+}
+extension Bundle {
+  public class func sdkResourceBundle() -> Foundation.Bundle?
+}
+public struct alert {
+}
+@objc @_inheritsConvenienceInitializers open class Model : RealmSwift.Object {
+  public static var realmTokens: [Realm.RLMNotificationToken]
+  @objc override public static func primaryKey() -> Swift.String?
+  @objc required dynamic public init()
+  @objc deinit
+}
+@objc @_inheritsConvenienceInitializers public class VideoCameraDevice : GMI.CameraDevice {
+  @objc override dynamic public init()
+  @objc deinit
+}
+public protocol DeviceEvent {
+}
+@objc @_inheritsConvenienceInitializers public class Device : ObjectiveC.NSObject {
+  @objc deinit
+  @objc override dynamic public init()
+}
+public struct DeviceParameters : Swift.Codable {
+  public init(from decoder: Swift.Decoder) throws
+  public func encode(to encoder: Swift.Encoder) throws
+}
+@objc @_inheritsConvenienceInitializers public class AppState : GMI.Model {
+  @objc dynamic public var pushToken: Swift.String?
+  @objc dynamic public var onboardingShown: Foundation.Date?
+  @objc dynamic public var whatsNewVersion: Swift.String?
+  @objc dynamic public var pushWasAsked: Foundation.Date?
+  @objc deinit
+  @objc required dynamic public init()
+}
+public protocol InteractionManagerDelegate {
+  func alertCompleted(_ captureable: GMI.Capturable)
+  func alertAccepted(_ captureable: GMI.Capturable)
+  func alertRejected(_ captureable: GMI.Capturable)
+  func enrollmentHidden(_ captureable: GMI.Capturable)
+  func enrollmentComplete(_ captureable: GMI.Capturable)
+}
+@_inheritsConvenienceInitializers @objc public class InteractionManager : ObjectiveC.NSObject {
+  public enum Interaction : Swift.Int {
+    case verify
+    case enroll
+    case network
+    case register
+    public typealias RawValue = Swift.Int
+    public init?(rawValue: Swift.Int)
+    public var rawValue: Swift.Int {
+      get
+    }
+  }
+  public var delegate: GMI.InteractionManagerDelegate?
+  @objc public var rootVCFromApp: UIKit.UIViewController?
+  @objc public var interactionOverlayRoot: GMI.InteractionManagerRootOverlayVC? {
+    @objc get
+    @objc set(newValue)
+  }
+  public func register(viewController: UIKit.UIViewController, delegate: GMI.InteractionManagerDelegate)
+  public func unregister()
+  @objc deinit
+  @objc override dynamic public init()
+}
+public protocol InteractionManagerRootOverlayVCProtocol : AnyObject {
+  func getActualRoot() -> UIKit.UIViewController?
+}
+@_inheritsConvenienceInitializers @objc public class InteractionManagerRootOverlayVC : UIKit.UIViewController, GMI.InteractionManagerRootOverlayVCProtocol {
+  public func getActualRoot() -> UIKit.UIViewController?
+  public func doCurrentCaptureFlow()
+  public func doTutorial(captureable: GMI.Capturable? = nil)
+  @objc override dynamic public func prepare(for segue: UIKit.UIStoryboardSegue, sender: Any?)
+  @objc deinit
+  @objc override dynamic public init(nibName nibNameOrNil: Swift.String?, bundle nibBundleOrNil: Foundation.Bundle?)
+  @objc required dynamic public init?(coder: Foundation.NSCoder)
+}
+@objc @_inheritsConvenienceInitializers open class SelfSizedTextView : UIKit.UITextView {
+  @objc override dynamic open var intrinsicContentSize: CoreGraphics.CGSize {
+    @objc get
+  }
+  @objc override dynamic open var contentSize: CoreGraphics.CGSize {
+    @objc get
+    @objc set(value)
+  }
+  @objc deinit
+  @available(iOS 7.0, *)
+  @objc override dynamic public init(frame: CoreGraphics.CGRect, textContainer: UIKit.NSTextContainer?)
+  @objc required dynamic public init?(coder: Foundation.NSCoder)
+}
+@objc @_inheritsConvenienceInitializers public class CameraDeviceParent : GMI.Device {
+  @objc deinit
+  @objc override dynamic public init()
+}
+@objc @_inheritsConvenienceInitializers public class CameraDevice : GMI.CameraDeviceParent, AVFoundation.AVCaptureVideoDataOutputSampleBufferDelegate {
+  public enum CameraPosition {
+    case front
+    case rear
+    public static func == (a: GMI.CameraDevice.CameraPosition, b: GMI.CameraDevice.CameraPosition) -> Swift.Bool
+    public var hashValue: Swift.Int {
+      get
+    }
+    public func hash(into hasher: inout Swift.Hasher)
+  }
+  @objc deinit
+  @objc override dynamic public init()
+}
+extension CameraDevice : AVFoundation.AVCapturePhotoCaptureDelegate {
+  @objc dynamic public func photoOutput(_ captureOutput: AVFoundation.AVCapturePhotoOutput, didFinishProcessingPhoto photoSampleBuffer: CoreMedia.CMSampleBuffer?, previewPhoto previewPhotoSampleBuffer: CoreMedia.CMSampleBuffer?, resolvedSettings: AVFoundation.AVCaptureResolvedPhotoSettings, bracketSettings: AVFoundation.AVCaptureBracketedStillImageSettings?, error: Swift.Error?)
+}
+public class Keychain {
+  public init()
+  public func deleteExistingKeys()
+  public func generateAndStoreNewKey() throws
+  public var publicKey: Security.SecKey? {
+    get
+  }
+  public var privateKey: Security.SecKey? {
+    get
+  }
+  @objc deinit
+}
+@_inheritsConvenienceInitializers @objc public class Account : GMI.Model {
+  @objc dynamic public var email: Swift.String
+  @objc dynamic public var deviceId: Swift.String
+  @objc dynamic public var oauth: GMI.OAuth?
+  @objc dynamic public var config: GMI.Config?
+  @objc dynamic public var tenantEnrollServer: Swift.String?
+  @objc dynamic public var id: Swift.String?
+  @objc dynamic public var verifyServer: Swift.String?
+  @objc dynamic public var voiceDigits: Swift.String?
+  @objc dynamic public var tenantVerifyServer: Swift.String?
+  @objc dynamic public var enrollServer: Swift.String?
+  @objc dynamic public var name: Swift.String?
+  @objc dynamic public var date2FARequestThisDevice: Foundation.NSDate?
+  @objc dynamic public var emailVerified: Swift.Bool
+  @objc dynamic public var dateDeviceRegister: Foundation.NSDate?
+  @objc dynamic public var eulaAccepted: Foundation.NSDate?
+  public var pemPublicKey: Swift.String? {
+    get
+  }
+  public func gmiSign(url: Foundation.URL, data: Foundation.Data?) throws -> Swift.String
+  @objc deinit
+  @objc required dynamic public init()
+}
+public enum GMIError : Swift.Error {
+  case notFound
+  case requestFailed
+  case invalidParameters(_: Swift.String)
+  case malformedJson
+  case maxRetriesExceeded
+  case messageExpired
+  case other(Swift.Error?)
+}
+public enum GMIResponse<T> {
+  case success(T)
+  case error(GMI.GMIError)
+}
+extension UIColor {
+  public convenience init?(hex: Swift.String)
+}
+extension UIColor {
+  public struct Alerts {
+    public static var verified: UIKit.UIColor {
+      get
+    }
+    public static var rejected: UIKit.UIColor {
+      get
+    }
+    public static var noalerts: UIKit.UIColor {
+      get
+    }
+    public static var text: UIKit.UIColor {
+      get
+    }
+  }
+  public struct Notifications {
+    public static var notification: UIKit.UIColor {
+      get
+    }
+    public static var dismiss: UIKit.UIColor {
+      get
+    }
+    public static var view: UIKit.UIColor {
+      get
+    }
+    public static var text: UIKit.UIColor {
+      get
+    }
+  }
+  public struct Registration {
+    public static var background: UIKit.UIColor {
+      get
+    }
+    public static var text: UIKit.UIColor {
+      get
+    }
+    public static var editfield: UIKit.UIColor {
+      get
+    }
+    public static var editline: UIKit.UIColor {
+      get
+    }
+    public static var button: UIKit.UIColor {
+      get
+    }
+    public static var buttontext: UIKit.UIColor {
+      get
+    }
+    public static var errortext: UIKit.UIColor {
+      get
+    }
+  }
+  public struct About {
+    public static var background: UIKit.UIColor {
+      get
+    }
+    public static var text: UIKit.UIColor {
+      get
+    }
+    public static var textlink: UIKit.UIColor {
+      get
+    }
+    public static var divider: UIKit.UIColor {
+      get
+    }
+  }
+  public struct Account {
+    public static var menubackground: UIKit.UIColor {
+      get
+    }
+    public static var background: UIKit.UIColor {
+      get
+    }
+    public static var text: UIKit.UIColor {
+      get
+    }
+    public static var uneditabletext: UIKit.UIColor {
+      get
+    }
+    public static var linktext: UIKit.UIColor {
+      get
+    }
+    public static var enrolledtext: UIKit.UIColor {
+      get
+    }
+  }
+}
+@_inheritsConvenienceInitializers @objc public class Enroll : GMI.Capturable, Swift.Decodable {
+  @objc dynamic public var completed: Swift.Bool
+  @objc dynamic public var messageID: Swift.Int
+  @objc dynamic public var metadata: GMI.EnrollMetadata?
+  @objc deinit
+  @objc required dynamic public init()
+  required public init(from decoder: Swift.Decoder) throws
+}
+@_inheritsConvenienceInitializers @objc public class EnrollMetadata : GMI.Model, Swift.Decodable {
+  @objc dynamic public var enrollData: GMI.EnrollData?
+  @objc deinit
+  @objc required dynamic public init()
+  required public init(from decoder: Swift.Decoder) throws
+}
+@_inheritsConvenienceInitializers @objc public class EnrollData : GMI.Model, Swift.Decodable {
+  public var captureType: GMI.CaptureType? {
+    get
+    set(newValue)
+  }
+  @objc dynamic public var algCode: Swift.String?
+  @objc dynamic public var account: GMI.Account?
+  @objc override public static func ignoredProperties() -> [Swift.String]
+  @objc deinit
+  @objc required dynamic public init()
+  required public init(from decoder: Swift.Decoder) throws
+}
+@_hasMissingDesignatedInitializers public class RSAUtils {
+  @objc @_hasMissingDesignatedInitializers @available(iOS 1.2.0, *)
+  public class RSAUtilsError : Foundation.NSError {
+    @available(*, unavailable)
+    @objc required dynamic public init?(coder aDecoder: Foundation.NSCoder)
+    @objc deinit
+    @objc override dynamic public init(domain: Swift.String, code: Swift.Int, userInfo dict: [Swift.String : Any]? = nil)
+  }
+  @available(iOS 1.2.0, *)
+  public static func deleteRSAKeyFromKeychain(_ tagName: Swift.String)
+  @available(iOS 1.2.0, *)
+  public static func getRSAKeyFromKeychain(_ tagName: Swift.String) -> Security.SecKey?
+  @available(iOS 1.2.0, *)
+  @discardableResult
+  public static func addRSAPrivateKey(_ privkeyBase64: Swift.String, tagName: Swift.String) throws -> Security.SecKey?
+  @available(iOS 1.2.0, *)
+  @discardableResult
+  public static func addRSAPublicKey(_ pubkeyBase64: Swift.String, tagName: Swift.String) throws -> Security.SecKey?
+  @available(iOS 1.2.0, *)
+  public static func encryptWithRSAKey(_ data: Foundation.Data, rsaKeyRef: Security.SecKey, padding: Security.SecPadding) -> Foundation.Data?
+  @available(iOS 1.2.0, *)
+  public static func decryptWithRSAKey(_ encryptedData: Foundation.Data, rsaKeyRef: Security.SecKey, padding: Security.SecPadding) -> Foundation.Data?
+  @available(iOS 1.2.0, *)
+  public static func encryptWithRSAKey(data: Foundation.Data, tagName: Swift.String) -> Foundation.Data?
+  @available(iOS 1.2.0, *)
+  public static func encryptWithRSAKey(str: Swift.String, tagName: Swift.String) -> Foundation.Data?
+  @available(iOS 1.2.0, *)
+  public static func decryptWithRSAKey(encryptedData: Foundation.Data, tagName: Swift.String) -> Foundation.Data?
+  @available(iOS 1.2.0, *)
+  public static func encryptWithRSAPublicKey(data: Foundation.Data, pubkeyBase64: Swift.String) throws -> Foundation.Data?
+  @available(iOS 1.2.0, *)
+  public static func encryptWithRSAPublicKey(str: Swift.String, pubkeyBase64: Swift.String) throws -> Foundation.Data?
+  @available(iOS 1.2.0, *)
+  public static func encryptWithRSAPublicKey(data: Foundation.Data, pubkeyBase64: Swift.String, tagName: Swift.String) throws -> Foundation.Data?
+  @available(iOS 1.2.0, *)
+  public static func encryptWithRSAPublicKey(str: Swift.String, pubkeyBase64: Swift.String, tagName: Swift.String) throws -> Foundation.Data?
+  @available(iOS 1.2.0, *)
+  public static func decryptWithRSAPrivateKey(encryptedData: Foundation.Data, privkeyBase64: Swift.String) throws -> Foundation.Data?
+  @available(iOS 1.2.0, *)
+  public static func decryptWithRSAPrivateKey(encryptedData: Foundation.Data, privkeyBase64: Swift.String, tagName: Swift.String) throws -> Foundation.Data?
+  @objc deinit
+}
+extension UIStackView {
+  public func resizeSubViews()
+}
+public protocol CaptureProtocol : AnyObject {
+  func captureStart()
+  func restart()
+  func captureStop()
+  func captureCancelled()
+  func captureSuccess(captureProbe: GMI.CaptureProbe)
+  func captureSuccess(captureType: GMI.CaptureType, captureProbes: [GMI.CaptureProbe])
+  func captureError(_ capturable: GMI.Capturable, error: Swift.Error)
+  func tutorialCompletion(_ captureable: GMI.Capturable)
+}
+public enum CaptureType : Swift.String, Swift.CaseIterable {
+  case pin
+  case palm
+  case face
+  case voice
+  case passphrase
+  case device
+  case yesno
+  public var isLocalAuthType: Swift.Bool {
+    get
+  }
+  public var isIdentityRelated: Swift.Bool {
+    get
+  }
+  public var userFriendlyName: Swift.String {
+    get
+  }
+  public var tutorialSegueName: Swift.String? {
+    get
+  }
+  public var icon: UIKit.UIImage? {
+    get
+  }
+  public static func < (left: GMI.CaptureType, right: GMI.CaptureType) -> Swift.Bool
+  public typealias RawValue = Swift.String
+  public init?(rawValue: Swift.String)
+  public var rawValue: Swift.String {
+    get
+  }
+  public typealias AllCases = [GMI.CaptureType]
+  public static var allCases: [GMI.CaptureType] {
+    get
+  }
+}
+@objc @_inheritsConvenienceInitializers public class AlertViewController : UIKit.UIViewController {
+  @objc deinit
+  @objc override dynamic public init(nibName nibNameOrNil: Swift.String?, bundle nibBundleOrNil: Foundation.Bundle?)
+  @objc required dynamic public init?(coder: Foundation.NSCoder)
+}
+@objc @_inheritsConvenienceInitializers public class AlertManager : ObjectiveC.NSObject {
+  public static var shared: GMI.AlertManager
+  public func display<T>(dialogName: Swift.String = "StopEnrollmentAlert", _ alertDataSource: T, on viewController: UIKit.UIViewController) where T : GMI.SystemAlertDataSource
+  public func display<T>(dialogName: Swift.String = "StopEnrollmentAlert", _ alertDataSource: T, on viewController: UIKit.UIViewController, completion: @escaping (UIKit.UIViewController) -> ()) where T : GMI.SystemAlertDataSource
+  public func presentOnRoot(viewController: UIKit.UIViewController?, completion: @escaping () -> ())
+  public func dismiss(viewController: UIKit.UIViewController, completion: @escaping () -> ())
+  @objc deinit
+  @objc override dynamic public init()
+}
+@_inheritsConvenienceInitializers @objc public class RESTError : GMI.Model {
+  @objc deinit
+  @objc required dynamic public init()
+}
+@objc @_hasMissingDesignatedInitializers public class CaptureFlowViewController : UIKit.UIViewController {
+  public var captureable: GMI.Capturable?
+  weak public var captureDelegate: GMI.CaptureProtocol?
+  @objc override dynamic public var description: Swift.String {
+    @objc get
+  }
+  @objc override dynamic public func viewDidLoad()
+  @objc override dynamic public func viewDidDisappear(_ animated: Swift.Bool)
+  @objc deinit
+  @objc override dynamic public init(nibName nibNameOrNil: Swift.String?, bundle nibBundleOrNil: Foundation.Bundle?)
+}
+@objc @_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers public class OAuth : GMI.Model, Swift.Codable {
+  @objc dynamic public var tokenType: Swift.String?
+  @objc dynamic public var scope: Swift.String?
+  @objc dynamic public var accessToken: Swift.String?
+  @objc dynamic public var config: GMI.Config?
+  @objc dynamic public var expiresAt: Swift.Int
+  public var isExpired: Swift.Bool {
+    get
+  }
+  required public init(from decoder: Swift.Decoder) throws
+  public func encode(to encoder: Swift.Encoder) throws
+  @objc deinit
+}
+@_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers @objc public class Message : GMI.Capturable, Swift.Decodable {
+  @objc dynamic public var messageID: Swift.String?
+  public var isExpired: Swift.Bool {
+    get
+  }
+  public var status: GMI.MessageStatus {
+    get
+    set(newValue)
+  }
+  @objc override public static func ignoredProperties() -> [Swift.String]
+  required public init(from decoder: Swift.Decoder) throws
+  @objc deinit
+}
+public enum MessageStatus : Swift.String {
+  case Unread
+  case Read
+  case Rejected
+  case Done
+  public typealias RawValue = Swift.String
+  public var rawValue: Swift.String {
+    get
+  }
+  public init?(rawValue: Swift.String)
+}
+@_inheritsConvenienceInitializers @objc public class SelectedBiometric : GMI.Model, Swift.Codable {
+  @objc deinit
+  @objc required dynamic public init()
+  required public init(from decoder: Swift.Decoder) throws
+  public func encode(to encoder: Swift.Encoder) throws
+}
+@objc @_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers public class Instance : ObjectiveC.NSObject {
+  public var pushToken: Swift.String? {
+    get
+    set(newValue)
+  }
+  public func pushAskConcluded()
+  @objc public static var gmiVersion: Swift.String {
+    @objc get
+  }
+  @objc public var appVersion: Swift.String {
+    @objc get
+  }
+  @objc public var deviceID: Swift.String {
+    @objc get
+  }
+  @objc public static var shared: GMI.Instance {
+    @objc get
+  }
+  @objc final public let restManager: GMI.RESTManager
+  @objc final public let captureFlowManager: GMI.CaptureFlowManager
+  @objc final public let interactionManager: GMI.InteractionManager
+  @objc final public let databaseManager: GMI.DatabaseManager
+  final public let log: GMI.Logger
+  public var appState: GMI.AppState?
+  @objc public static func debugMode(debugMockDB: GMI.DatabaseManager)
+  @objc deinit
+}
+@_inheritsConvenienceInitializers @objc public class RESTManager : ObjectiveC.NSObject {
+  @objc override dynamic public init()
+  @objc deinit
+}
+public enum StoryboardScene {
+  public enum Alerts {
+    public static var storyboardName: Swift.String
+    public static var genericAlert: GMI.SceneType<UIKit.UIViewController>
+    public static var noProfileAlert: GMI.SceneType<GMI.NoProfileAlert>
+    public static var stopEnrollmentAlert: GMI.SceneType<GMI.SystemAlert>
+  }
+  public enum WhatsNew {
+    public static var storyboardName: Swift.String
+    public static var benefitsBoard: GMI.SceneType<UIKit.UIViewController>
+    public static var congratulationBoard: GMI.SceneType<UIKit.UIViewController>
+    public static var onboardBoard: GMI.SceneType<UIKit.UIViewController>
+    public static var welcomeBoard: GMI.SceneType<UIKit.UIViewController>
+    public static var whatsNewBoard: GMI.SceneType<UIKit.UIViewController>
+  }
+}
+public struct SceneType<T> where T : UIKit.UIViewController {
+  public let identifier: Swift.String
+  public func instantiate() -> T
+}
+@objc @_inheritsConvenienceInitializers public class SystemAlert : GMI.AlertViewController {
+  @objc override dynamic public func viewDidLoad()
+  @objc deinit
+  @objc override dynamic public init(nibName nibNameOrNil: Swift.String?, bundle nibBundleOrNil: Foundation.Bundle?)
+  @objc required dynamic public init?(coder: Foundation.NSCoder)
+}
+public class SystemAlertDataSource {
+  required public init(param: Swift.String = "<Unset>", topButtonClosure: ((GMI.SystemAlert) -> ())? = nil, middleButtonClosure: ((GMI.SystemAlert) -> ())? = nil, bottomButtonClosure: ((GMI.SystemAlert) -> ())? = nil)
+  @objc deinit
+}
+@_inheritsConvenienceInitializers public class RD_05 : GMI.SystemAlertDataSource {
+  @objc deinit
+  required public init(param: Swift.String = super, topButtonClosure: ((GMI.SystemAlert) -> ())? = super, middleButtonClosure: ((GMI.SystemAlert) -> ())? = super, bottomButtonClosure: ((GMI.SystemAlert) -> ())? = super)
+}
+@_inheritsConvenienceInitializers public class RD_12 : GMI.SystemAlertDataSource {
+  @objc deinit
+  required public init(param: Swift.String = super, topButtonClosure: ((GMI.SystemAlert) -> ())? = super, middleButtonClosure: ((GMI.SystemAlert) -> ())? = super, bottomButtonClosure: ((GMI.SystemAlert) -> ())? = super)
+}
+@_hasMissingDesignatedInitializers public class CaptureProbe {
+  public var captureType: GMI.CaptureType {
+    get
+  }
+  public func serializeForFormData(boundary: Swift.String) -> Foundation.Data
+  @objc deinit
+}
+public enum DeviceDatum {
+  case face(UIKit.UIImage)
+  case palm(Foundation.Data)
+  case pin(Swift.String)
+  case voiceData(Foundation.Data)
+  case device(Swift.Bool)
+  case yesno(Swift.Bool)
+}
+extension UIImageView {
+  public func imageFromUrl(url: Foundation.URL)
+}
+extension UIViewController {
+  public func canPerformSegue(withIdentifier id: Swift.String) -> Swift.Bool
+  @discardableResult
+  public func performSegueIfPossible(id: Swift.String?, sender: Swift.AnyObject? = nil) -> Swift.Bool
+  public func setStatusBarColor()
+}
+extension UIViewController {
+  public var topMostVC: UIKit.UIViewController? {
+    get
+  }
+  public func findChild(with identifier: Swift.String) -> UIKit.UIView?
+}
+public protocol MessagesServiceManagerProtocol {
+  func setMessagesAndEnrollsUnread(completion: @escaping () -> ())
+  func syncronizeAlertsAndEnrollments(completion: @escaping () -> ())
+  var activeAlerts: Swift.Int { get }
+  var activeEnrolls: Swift.Int { get }
+}
+public class MessagesServiceManager : GMI.MessagesServiceManagerProtocol {
+  public init(database: GMI.DatabaseManager = Instance.shared.databaseManager, restManager: GMI.RESTManager = Instance.shared.restManager)
+  public var activeAlerts: Swift.Int {
+    get
+  }
+  public var activeEnrolls: Swift.Int {
+    get
+  }
+  public func setMessagesAndEnrollsUnread(completion: @escaping () -> ())
+  public func syncronizeAlertsAndEnrollments(completion: @escaping () -> ())
+  @objc deinit
+}
+public enum StoryboardSegue {
+  public enum Base : Swift.String, GMI.SegueType {
+    case eulaSegue
+    case accountDetailSegue
+    case captureTypeSegue
+    case checkYourEmailSegue
+    case configShowSegue
+    case exitToHome
+    case faceCaptureSegue
+    case registerSegueFromTabs
+    case profilesToAddAccountSegue
+    case unwindToAddAccountFromAlert
+    case unwindToHomeVCSegueFromRegister
+    case whatsnewsegue
+    public typealias RawValue = Swift.String
+    public init?(rawValue: Swift.String)
+    public var rawValue: Swift.String {
+      get
+    }
+  }
+  public enum InteractionManager : Swift.String, GMI.SegueType {
+    case captureAskSegue
+    case faceCaptureSegue
+    case palmCaptureSegue
+    case pinCaptureSegue
+    case tutorialSegue
+    case voiceCaptureSegue
+    case htPalmVerifySegue
+    public typealias RawValue = Swift.String
+    public init?(rawValue: Swift.String)
+    public var rawValue: Swift.String {
+      get
+    }
+  }
+}
+public protocol SegueType : Swift.RawRepresentable {
+}
+extension UIViewController {
+  public func perform<S>(segue: S, sender: Any? = nil) where S : GMI.SegueType, S.RawValue == Swift.String
+}
+extension SegueType where Self.RawValue == Swift.String {
+  public init?(_ segue: UIKit.UIStoryboardSegue)
+}
+@objc @_inheritsConvenienceInitializers open class OnboardingViewController : UIKit.UIPageViewController, UIKit.UIPageViewControllerDataSource, UIKit.UIPageViewControllerDelegate {
+  @objc public func pageViewController(_ pageViewController: UIKit.UIPageViewController, viewControllerBefore viewController: UIKit.UIViewController) -> UIKit.UIViewController?
+  @objc public func pageViewController(_ pageViewController: UIKit.UIPageViewController, viewControllerAfter viewController: UIKit.UIViewController) -> UIKit.UIViewController?
+  @objc public func presentationCount(for: UIKit.UIPageViewController) -> Swift.Int
+  @objc public func presentationIndex(for pageViewController: UIKit.UIPageViewController) -> Swift.Int
+  @objc override dynamic public func viewDidLoad()
+  @objc override dynamic public func viewWillAppear(_ animated: Swift.Bool)
+  @objc override dynamic public func didReceiveMemoryWarning()
+  @objc deinit
+  @objc override dynamic public init(transitionStyle style: UIKit.UIPageViewController.TransitionStyle, navigationOrientation: UIKit.UIPageViewController.NavigationOrientation, options: [UIKit.UIPageViewController.OptionsKey : Any]? = nil)
+  @objc required dynamic public init?(coder: Foundation.NSCoder)
+}
+@objc @_inheritsConvenienceInitializers public class OnboardingScreenViewController : UIKit.UIViewController {
+  @objc override dynamic public func viewDidLoad()
+  @objc override dynamic public func didReceiveMemoryWarning()
+  @objc override dynamic public func prepare(for segue: UIKit.UIStoryboardSegue, sender: Any?)
+  @objc deinit
+  @objc override dynamic public init(nibName nibNameOrNil: Swift.String?, bundle nibBundleOrNil: Foundation.Bundle?)
+  @objc required dynamic public init?(coder: Foundation.NSCoder)
+}
+@_inheritsConvenienceInitializers @objc public class CaptureManager : ObjectiveC.NSObject {
+  public static var shared: GMI.CaptureManager
+  @objc deinit
+  @objc override dynamic public init()
+}
+@objc @_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers public class Config : GMI.Model, Swift.Codable {
+  @objc dynamic public var presetName: Swift.String
+  @objc dynamic public var presetTitle: Swift.String
+  @objc dynamic public var gmiServerUrl: Swift.String
+  @objc dynamic public var gmiClientSecret: Swift.String
+  @objc dynamic public var gmiClientId: Swift.String
+  @objc dynamic public var gmiUserManagerUrl: Swift.String
+  @objc dynamic public var defaultTenantCode: Swift.String
+  @objc dynamic public var applicationCode: Swift.String
+  public var defaultRegions: [Swift.String]?
+  @objc dynamic public var presetTag: Swift.String?
+  @objc override public static func ignoredProperties() -> [Swift.String]
+  required public init(presetName: Swift.String, presetTitle: Swift.String, serverUrl: Swift.String, clientSecret: Swift.String, clientID: Swift.String, userManagerUrl: Swift.String, defaultTenantCode: Swift.String, applicationCode: Swift.String)
+  @objc deinit
+  required public init(from decoder: Swift.Decoder) throws
+  public func encode(to encoder: Swift.Encoder) throws
+}
+extension UIDevice {
+  public static var modelName: Swift.String
+}
+@objc @_inheritsConvenienceInitializers public class NoProfileAlert : UIKit.UIViewController {
+  @objc deinit
+  @objc override dynamic public init(nibName nibNameOrNil: Swift.String?, bundle nibBundleOrNil: Foundation.Bundle?)
+  @objc required dynamic public init?(coder: Foundation.NSCoder)
+}
+@objc public class CaptureFlow : ObjectiveC.NSObject {
+  final public let captureable: GMI.Capturable?
+  public init?(_ captureable: GMI.Capturable)
+  public func submitToGMI()
+  @objc deinit
+  @objc override dynamic public init()
+}
+@_inheritsConvenienceInitializers @objc public class CaptureDatum : ObjectiveC.NSObject {
+  @objc deinit
+  @objc override dynamic public init()
+}
+@objc @_inheritsConvenienceInitializers public class PersonEnrollStatus : GMI.Model, Swift.Decodable {
+  @objc dynamic public var hidden: Foundation.Date?
+  @objc dynamic public var skipped: Foundation.Date?
+  @objc dynamic public var captureType: Swift.String?
+  @objc dynamic public var algCode: Swift.String?
+  @objc dynamic public var tenantCode: Swift.String?
+  @objc dynamic public var userID: Swift.String?
+  @objc deinit
+  @objc required dynamic public init()
+  required public init(from decoder: Swift.Decoder) throws
+}
