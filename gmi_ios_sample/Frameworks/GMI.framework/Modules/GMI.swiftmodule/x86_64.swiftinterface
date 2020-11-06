@@ -76,7 +76,6 @@ import UIKit
   @objc func unreadAlerts(_ completion: @escaping ([GMI.Message]) -> ())
   @objc func activeAlerts() -> [GMI.Message]
   @objc func appState() -> GMI.AppState
-  @objc func configs() -> [GMI.Config]
   @objc func accounts() -> [GMI.Account]
   @objc func accounts(_ completion: @escaping ([GMI.Account]) -> ())
 }
@@ -105,7 +104,6 @@ extension RLMNotificationToken : GMI.DatabaseNotificationToken {
   @objc public func accounts() -> [GMI.Account]
   @objc public func accounts(_ completion: @escaping ([GMI.Account]) -> ())
   @objc public func appState() -> GMI.AppState
-  @objc public func configs() -> [GMI.Config]
   @objc deinit
 }
 extension RealmDatabaseManager : GMI.DatabaseManagerObservable {
@@ -117,17 +115,17 @@ extension UICollectionViewCell {
   }
 }
 public protocol DeviceServiceManagerProtocol {
-  func registerDevice(account: GMI.Account, persistUser: Swift.Bool, completion: @escaping (IWS_Shared_Components.Response<Swift.Void>) -> ())
-  func personForEmail(account: GMI.Account, completion: @escaping (IWS_Shared_Components.Response<GMI.Person>) -> ())
-  func peopleForDeviceId(account: GMI.Account, completion: @escaping (IWS_Shared_Components.Response<[GMI.Person]>) -> ())
-  func deletePersonForDeviceId(account: GMI.Account, completion: @escaping (IWS_Shared_Components.Response<Swift.Void>) -> ())
+  func registerDevice(account: GMI.Account, persistUser: Swift.Bool, completion: @escaping (GMI.GMIResponse<Swift.Void>) -> ())
+  func personForEmail(account: GMI.Account, completion: @escaping (GMI.GMIResponse<GMI.Person>) -> ())
+  func peopleForDeviceId(account: GMI.Account, completion: @escaping (GMI.GMIResponse<[GMI.Person]>) -> ())
+  func deletePersonForDeviceId(account: GMI.Account, completion: @escaping (GMI.GMIResponse<Swift.Void>) -> ())
 }
 public class DeviceServiceManager : GMI.DeviceServiceManagerProtocol {
   public init(database: GMI.DatabaseManager = Instance.shared.databaseManager, restManager: GMI.RESTManager = Instance.shared.restManager)
-  public func registerDevice(account: GMI.Account, persistUser: Swift.Bool, completion: @escaping (IWS_Shared_Components.Response<Swift.Void>) -> ())
-  public func personForEmail(account: GMI.Account, completion: @escaping (IWS_Shared_Components.Response<GMI.Person>) -> ())
-  public func peopleForDeviceId(account: GMI.Account, completion: @escaping (IWS_Shared_Components.Response<[GMI.Person]>) -> ())
-  public func deletePersonForDeviceId(account: GMI.Account, completion: @escaping (IWS_Shared_Components.Response<Swift.Void>) -> ())
+  public func registerDevice(account: GMI.Account, persistUser: Swift.Bool, completion: @escaping (GMI.GMIResponse<Swift.Void>) -> ())
+  public func personForEmail(account: GMI.Account, completion: @escaping (GMI.GMIResponse<GMI.Person>) -> ())
+  public func peopleForDeviceId(account: GMI.Account, completion: @escaping (GMI.GMIResponse<[GMI.Person]>) -> ())
+  public func deletePersonForDeviceId(account: GMI.Account, completion: @escaping (GMI.GMIResponse<Swift.Void>) -> ())
   @objc deinit
 }
 @objc public class CaptureFlowManager : ObjectiveC.NSObject {
@@ -145,9 +143,9 @@ public class DeviceServiceManager : GMI.DeviceServiceManagerProtocol {
   @objc override dynamic public init()
 }
 public protocol CaptureFlowServiceManagerProtocol {
-  func markAsRead(message: GMI.Message, completion: @escaping (IWS_Shared_Components.Response<Swift.Void>) -> ())
-  func reject(message: GMI.Message, completion: @escaping (IWS_Shared_Components.Response<Swift.Void>) -> ())
-  func upload(captureable: GMI.Capturable, captureProbes: [GMI.CaptureType : [GMI.CaptureProbe]], completion: @escaping (IWS_Shared_Components.Response<Swift.Bool>) -> ())
+  func markAsRead(message: GMI.Message, completion: @escaping (GMI.GMIResponse<Swift.Void>) -> ())
+  func reject(message: GMI.Message, completion: @escaping (GMI.GMIResponse<Swift.Void>) -> ())
+  func upload(captureable: GMI.Capturable, captureProbes: [GMI.CaptureType : [GMI.CaptureProbe]], completion: @escaping (GMI.GMIResponse<Swift.Bool>) -> ())
 }
 @objc public class CaptureableUploadResponse : GMI.Model, Swift.Decodable {
   @objc deinit
@@ -172,8 +170,8 @@ public struct alert {
 @objc @_inheritsConvenienceInitializers open class Model : RealmSwift.Object {
   public static var realmTokens: [Realm.RLMNotificationToken]
   @objc override public static func primaryKey() -> Swift.String?
-  @objc deinit
   @objc required dynamic public init()
+  @objc deinit
 }
 @objc @_inheritsConvenienceInitializers public class VideoCameraDevice : GMI.CameraDevice {
   @objc override dynamic public init()
@@ -182,15 +180,14 @@ public struct alert {
 public protocol DeviceEvent {
 }
 @objc @_inheritsConvenienceInitializers public class Device : ObjectiveC.NSObject {
-  @objc override dynamic public init()
   @objc deinit
+  @objc override dynamic public init()
 }
 public struct DeviceParameters : Swift.Codable {
   public init(from decoder: Swift.Decoder) throws
   public func encode(to encoder: Swift.Encoder) throws
 }
 @objc @_inheritsConvenienceInitializers public class AppState : GMI.Model {
-  @objc dynamic public var config: GMI.Config?
   @objc dynamic public var pushToken: Swift.String?
   @objc dynamic public var onboardingShown: Foundation.Date?
   @objc dynamic public var whatsNewVersion: Swift.String?
@@ -217,13 +214,13 @@ public protocol InteractionManagerDelegate {
       get
     }
   }
-  weak public var delegate: (UIKit.UIViewController & GMI.InteractionManagerDelegate)?
+  public var delegate: GMI.InteractionManagerDelegate?
   @objc public var rootVCFromApp: UIKit.UIViewController?
   @objc public var interactionOverlayRoot: GMI.InteractionManagerRootOverlayVC? {
     @objc get
     @objc set(newValue)
   }
-  public func register(viewController: UIKit.UIViewController & GMI.InteractionManagerDelegate)
+  public func register(viewController: UIKit.UIViewController, delegate: GMI.InteractionManagerDelegate)
   public func unregister()
   @objc deinit
   @objc override dynamic public init()
@@ -254,8 +251,8 @@ public protocol InteractionManagerRootOverlayVCProtocol : AnyObject {
   @objc required dynamic public init?(coder: Foundation.NSCoder)
 }
 @objc @_inheritsConvenienceInitializers public class CameraDeviceParent : GMI.Device {
-  @objc override dynamic public init()
   @objc deinit
+  @objc override dynamic public init()
 }
 @objc @_inheritsConvenienceInitializers public class CameraDevice : GMI.CameraDeviceParent, AVFoundation.AVCaptureVideoDataOutputSampleBufferDelegate {
   public enum CameraPosition {
@@ -267,8 +264,8 @@ public protocol InteractionManagerRootOverlayVCProtocol : AnyObject {
     }
     public func hash(into hasher: inout Swift.Hasher)
   }
-  @objc override dynamic public init()
   @objc deinit
+  @objc override dynamic public init()
 }
 extension CameraDevice : AVFoundation.AVCapturePhotoCaptureDelegate {
   @objc dynamic public func photoOutput(_ captureOutput: AVFoundation.AVCapturePhotoOutput, didFinishProcessingPhoto photoSampleBuffer: CoreMedia.CMSampleBuffer?, previewPhoto previewPhotoSampleBuffer: CoreMedia.CMSampleBuffer?, resolvedSettings: AVFoundation.AVCaptureResolvedPhotoSettings, bracketSettings: AVFoundation.AVCaptureBracketedStillImageSettings?, error: Swift.Error?)
@@ -307,6 +304,19 @@ public class Keychain {
   public func gmiSign(url: Foundation.URL, data: Foundation.Data?) throws -> Swift.String
   @objc deinit
   @objc required dynamic public init()
+}
+public enum GMIError : Swift.Error {
+  case notFound
+  case requestFailed
+  case invalidParameters(_: Swift.String)
+  case malformedJson
+  case maxRetriesExceeded
+  case messageExpired
+  case other(Swift.Error?)
+}
+public enum GMIResponse<T> {
+  case success(T)
+  case error(GMI.GMIError)
 }
 extension UIColor {
   public convenience init?(hex: Swift.String)
@@ -607,7 +617,6 @@ public enum MessageStatus : Swift.String {
   @objc final public let captureFlowManager: GMI.CaptureFlowManager
   @objc final public let interactionManager: GMI.InteractionManager
   @objc final public let databaseManager: GMI.DatabaseManager
-  @objc public static var configsPath: Swift.String?
   final public let log: GMI.Logger
   public var appState: GMI.AppState?
   @objc public static func debugMode(debugMockDB: GMI.DatabaseManager)
@@ -688,9 +697,17 @@ extension UIViewController {
 public protocol MessagesServiceManagerProtocol {
   func setMessagesAndEnrollsUnread(completion: @escaping () -> ())
   func syncronizeAlertsAndEnrollments(completion: @escaping () -> ())
+  var activeAlerts: Swift.Int { get }
+  var activeEnrolls: Swift.Int { get }
 }
 public class MessagesServiceManager : GMI.MessagesServiceManagerProtocol {
   public init(database: GMI.DatabaseManager = Instance.shared.databaseManager, restManager: GMI.RESTManager = Instance.shared.restManager)
+  public var activeAlerts: Swift.Int {
+    get
+  }
+  public var activeEnrolls: Swift.Int {
+    get
+  }
   public func setMessagesAndEnrollsUnread(completion: @escaping () -> ())
   public func syncronizeAlertsAndEnrollments(completion: @escaping () -> ())
   @objc deinit
@@ -772,6 +789,8 @@ extension SegueType where Self.RawValue == Swift.String {
   @objc dynamic public var gmiUserManagerUrl: Swift.String
   @objc dynamic public var defaultTenantCode: Swift.String
   @objc dynamic public var applicationCode: Swift.String
+  public var defaultRegions: [Swift.String]?
+  @objc dynamic public var presetTag: Swift.String?
   @objc override public static func ignoredProperties() -> [Swift.String]
   required public init(presetName: Swift.String, presetTitle: Swift.String, serverUrl: Swift.String, clientSecret: Swift.String, clientID: Swift.String, userManagerUrl: Swift.String, defaultTenantCode: Swift.String, applicationCode: Swift.String)
   @objc deinit

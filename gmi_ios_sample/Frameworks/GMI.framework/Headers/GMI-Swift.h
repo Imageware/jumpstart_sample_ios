@@ -262,7 +262,6 @@ SWIFT_CLASS("_TtC3GMI19AlertViewController")
 
 SWIFT_CLASS("_TtC3GMI8AppState")
 @interface AppState : Model
-@property (nonatomic, strong) Config * _Nullable config;
 @property (nonatomic, copy) NSString * _Nullable pushToken;
 @property (nonatomic, copy) NSDate * _Nullable onboardingShown;
 @property (nonatomic, copy) NSString * _Nullable whatsNewVersion;
@@ -359,6 +358,7 @@ SWIFT_CLASS("_TtC3GMI6Config")
 @property (nonatomic, copy) NSString * _Nonnull gmiUserManagerUrl;
 @property (nonatomic, copy) NSString * _Nonnull defaultTenantCode;
 @property (nonatomic, copy) NSString * _Nonnull applicationCode;
+@property (nonatomic, copy) NSString * _Nullable presetTag;
 + (NSArray<NSString *> * _Nonnull)ignoredProperties SWIFT_WARN_UNUSED_RESULT;
 - (nonnull instancetype)init SWIFT_UNAVAILABLE;
 + (nonnull instancetype)new SWIFT_UNAVAILABLE_MSG("-init is unavailable");
@@ -388,7 +388,6 @@ SWIFT_PROTOCOL("_TtP3GMI15DatabaseManager_")
 - (void)unreadAlerts:(void (^ _Nonnull)(NSArray<Message *> * _Nonnull))completion;
 - (NSArray<Message *> * _Nonnull)activeAlerts SWIFT_WARN_UNUSED_RESULT;
 - (AppState * _Nonnull)appState SWIFT_WARN_UNUSED_RESULT;
-- (NSArray<Config *> * _Nonnull)configs SWIFT_WARN_UNUSED_RESULT;
 - (NSArray<Account *> * _Nonnull)accounts SWIFT_WARN_UNUSED_RESULT;
 - (void)accounts:(void (^ _Nonnull)(NSArray<Account *> * _Nonnull))completion;
 @end
@@ -436,9 +435,6 @@ SWIFT_CLASS_PROPERTY(@property (nonatomic, class, readonly, strong) Instance * _
 @property (nonatomic, readonly, strong) CaptureFlowManager * _Nonnull captureFlowManager;
 @property (nonatomic, readonly, strong) InteractionManager * _Nonnull interactionManager;
 @property (nonatomic, readonly, strong) id <DatabaseManager> _Nonnull databaseManager;
-SWIFT_CLASS_PROPERTY(@property (nonatomic, class, copy) NSString * _Nullable configsPath;)
-+ (NSString * _Nullable)configsPath SWIFT_WARN_UNUSED_RESULT;
-+ (void)setConfigsPath:(NSString * _Nullable)value;
 - (nonnull instancetype)init SWIFT_UNAVAILABLE;
 + (nonnull instancetype)new SWIFT_UNAVAILABLE_MSG("-init is unavailable");
 + (void)debugModeWithDebugMockDB:(id <DatabaseManager> _Nonnull)debugMockDB;
@@ -574,7 +570,6 @@ SWIFT_CLASS("_TtC3GMI20RealmDatabaseManager")
 - (NSArray<Account *> * _Nonnull)accounts SWIFT_WARN_UNUSED_RESULT;
 - (void)accounts:(void (^ _Nonnull)(NSArray<Account *> * _Nonnull))completion;
 - (AppState * _Nonnull)appState SWIFT_WARN_UNUSED_RESULT;
-- (NSArray<Config *> * _Nonnull)configs SWIFT_WARN_UNUSED_RESULT;
 @end
 
 
