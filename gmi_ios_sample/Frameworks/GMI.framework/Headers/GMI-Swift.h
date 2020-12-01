@@ -215,24 +215,15 @@ SWIFT_CLASS("_TtC3GMI5Model")
 @end
 
 @class Config;
-@class NSDate;
 
 SWIFT_CLASS("_TtC3GMI7Account")
 @interface Account : Model
 @property (nonatomic, copy) NSString * _Nonnull email;
-@property (nonatomic, copy) NSString * _Nonnull deviceId;
 @property (nonatomic, strong) Config * _Nullable config;
-@property (nonatomic, copy) NSString * _Nullable tenantEnrollServer;
 @property (nonatomic, copy) NSString * _Nullable id;
-@property (nonatomic, copy) NSString * _Nullable verifyServer;
-@property (nonatomic, copy) NSString * _Nullable voiceDigits;
-@property (nonatomic, copy) NSString * _Nullable tenantVerifyServer;
-@property (nonatomic, copy) NSString * _Nullable enrollServer;
 @property (nonatomic, copy) NSString * _Nullable name;
-@property (nonatomic, strong) NSDate * _Nullable date2FARequestThisDevice;
 /// whether this account has completed the 2FA step and registered their email, defaults to false
 @property (nonatomic) BOOL emailVerified;
-@property (nonatomic, strong) NSDate * _Nullable dateDeviceRegister;
 - (nonnull instancetype)init OBJC_DESIGNATED_INITIALIZER;
 @end
 
@@ -277,7 +268,6 @@ SWIFT_CLASS("_TtC3GMI6Enroll")
 SWIFT_CLASS("_TtC3GMI10EnrollData")
 @interface EnrollData : Model
 @property (nonatomic, copy) NSString * _Nullable algCode;
-@property (nonatomic, strong) Account * _Nullable account;
 + (NSArray<NSString *> * _Nonnull)ignoredProperties SWIFT_WARN_UNUSED_RESULT;
 - (nonnull instancetype)init OBJC_DESIGNATED_INITIALIZER;
 @end
@@ -291,21 +281,6 @@ SWIFT_CLASS("_TtC3GMI14EnrollMetadata")
 
 
 
-SWIFT_CLASS("_TtC3GMI7Message")
-@interface Message : Capturable
-@property (nonatomic, copy) NSString * _Nullable messageID;
-+ (NSArray<NSString *> * _Nonnull)ignoredProperties SWIFT_WARN_UNUSED_RESULT;
-- (nonnull instancetype)init SWIFT_UNAVAILABLE;
-+ (nonnull instancetype)new SWIFT_UNAVAILABLE_MSG("-init is unavailable");
-@end
-
-
-
-
-SWIFT_CLASS("_TtC3GMI17SelectedBiometric")
-@interface SelectedBiometric : Model
-- (nonnull instancetype)init OBJC_DESIGNATED_INITIALIZER;
-@end
 
 
 

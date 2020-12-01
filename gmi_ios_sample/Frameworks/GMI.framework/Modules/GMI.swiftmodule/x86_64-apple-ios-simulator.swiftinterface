@@ -34,39 +34,23 @@ import UIKit
 }
 @_hasMissingDesignatedInitializers public class Person : Swift.Codable {
   public var id: Swift.String?
-  public var email: Swift.String?
-  public var enrollServer: Swift.String?
   public var tenantEnrollServer: Swift.String?
-  public var tenantVerifyServer: Swift.String?
-  public var verifyServer: Swift.String?
   @objc deinit
   required public init(from decoder: Swift.Decoder) throws
   public func encode(to encoder: Swift.Encoder) throws
 }
-@_hasMissingDesignatedInitializers public class data : Swift.Codable {
-  @objc deinit
-  required public init(from decoder: Swift.Decoder) throws
-  public func encode(to encoder: Swift.Encoder) throws
-}
-@_hasMissingDesignatedInitializers public class biometricMetadata : Swift.Codable {
-  @objc deinit
-  required public init(from decoder: Swift.Decoder) throws
-  public func encode(to encoder: Swift.Encoder) throws
-}
-public protocol DeviceServiceManagerProtocol {
-  func registerDevice(account: GMI.Account, completion: @escaping (GMI.GMIResponse<Swift.Void>) -> ())
-  func personForEmail(account: GMI.Account, completion: @escaping (GMI.GMIResponse<GMI.Person>) -> ())
+public protocol AccountServiceManagerProtocol {
+  func register(account: GMI.Account, resendConfirmation: Swift.Bool, completion: @escaping (GMI.GMIResponse<Swift.Void>) -> ())
+  func person(for account: GMI.Account, completion: @escaping (GMI.GMIResponse<GMI.Person>) -> ())
   func save(account: GMI.Account)
   func delete(account: GMI.Account)
-  func peopleForDeviceId(account: GMI.Account, completion: @escaping (GMI.GMIResponse<[GMI.Person]>) -> ())
-  func deletePersonForDeviceId(account: GMI.Account, completion: @escaping (GMI.GMIResponse<Swift.Void>) -> ())
+  func removePerson(for account: GMI.Account, completion: @escaping (GMI.GMIResponse<Swift.Void>) -> ())
   func update(account: GMI.Account, name: Swift.String)
-  func verify(account: GMI.Account)
   func updatePush(token: Swift.String)
   var gmiVersion: Swift.String { get }
   var accounts: [GMI.Account] { get }
 }
-@_hasMissingDesignatedInitializers public class DeviceServiceManager : GMI.DeviceServiceManagerProtocol {
+@_hasMissingDesignatedInitializers public class AccountServiceManager : GMI.AccountServiceManagerProtocol {
   public convenience init()
   public var gmiVersion: Swift.String {
     get
@@ -77,15 +61,13 @@ public protocol DeviceServiceManagerProtocol {
   public func save(account: GMI.Account)
   public func delete(account: GMI.Account)
   public func update(account: GMI.Account, name: Swift.String)
-  public func verify(account: GMI.Account)
   public func updatePush(token: Swift.String)
-  public func registerDevice(account: GMI.Account, completion: @escaping (GMI.GMIResponse<Swift.Void>) -> ())
-  public func personForEmail(account: GMI.Account, completion: @escaping (GMI.GMIResponse<GMI.Person>) -> ())
-  public func peopleForDeviceId(account: GMI.Account, completion: @escaping (GMI.GMIResponse<[GMI.Person]>) -> ())
-  public func deletePersonForDeviceId(account: GMI.Account, completion: @escaping (GMI.GMIResponse<Swift.Void>) -> ())
+  public func register(account: GMI.Account, resendConfirmation: Swift.Bool, completion: @escaping (GMI.GMIResponse<Swift.Void>) -> ())
+  public func person(for account: GMI.Account, completion: @escaping (GMI.GMIResponse<GMI.Person>) -> ())
+  public func removePerson(for account: GMI.Account, completion: @escaping (GMI.GMIResponse<Swift.Void>) -> ())
   @objc deinit
 }
-@objc @_inheritsConvenienceInitializers open class Model : RealmSwift.Object {
+@objc @_inheritsConvenienceInitializers public class Model : RealmSwift.Object {
   public static var realmTokens: [Realm.RLMNotificationToken]
   @objc override public static func primaryKey() -> Swift.String?
   @objc deinit
@@ -112,22 +94,10 @@ public class Keychain {
 }
 @_inheritsConvenienceInitializers @objc public class Account : GMI.Model {
   @objc dynamic public var email: Swift.String
-  @objc dynamic public var deviceId: Swift.String
   @objc dynamic public var config: GMI.Config?
-  @objc dynamic public var tenantEnrollServer: Swift.String?
   @objc dynamic public var id: Swift.String?
-  @objc dynamic public var verifyServer: Swift.String?
-  @objc dynamic public var voiceDigits: Swift.String?
-  @objc dynamic public var tenantVerifyServer: Swift.String?
-  @objc dynamic public var enrollServer: Swift.String?
   @objc dynamic public var name: Swift.String?
-  @objc dynamic public var date2FARequestThisDevice: Foundation.NSDate?
   @objc dynamic public var emailVerified: Swift.Bool
-  @objc dynamic public var dateDeviceRegister: Foundation.NSDate?
-  public var pemPublicKey: Swift.String? {
-    get
-  }
-  public func gmiSign(url: Foundation.URL, data: Foundation.Data?) throws -> Swift.String
   @objc deinit
   @objc required dynamic public init()
 }
@@ -166,7 +136,6 @@ public enum GMIResponse<T> {
     set(newValue)
   }
   @objc dynamic public var algCode: Swift.String?
-  @objc dynamic public var account: GMI.Account?
   @objc override public static func ignoredProperties() -> [Swift.String]
   @objc deinit
   @objc required dynamic public init()
@@ -184,12 +153,6 @@ public enum CaptureType : Swift.String, Swift.CaseIterable {
   case passphrase
   case device
   case yesno
-  public var isLocalAuthType: Swift.Bool {
-    get
-  }
-  public var isIdentityRelated: Swift.Bool {
-    get
-  }
   public var userFriendlyName: Swift.String {
     get
   }
@@ -207,20 +170,6 @@ public enum CaptureType : Swift.String, Swift.CaseIterable {
     get
   }
 }
-@_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers @objc public class Message : GMI.Capturable, Swift.Codable {
-  @objc dynamic public var messageID: Swift.String?
-  public var isExpired: Swift.Bool {
-    get
-  }
-  public var status: GMI.MessageStatus {
-    get
-    set(newValue)
-  }
-  @objc override public static func ignoredProperties() -> [Swift.String]
-  required public init(from decoder: Swift.Decoder) throws
-  @objc deinit
-  public func encode(to encoder: Swift.Encoder) throws
-}
 public enum MessageStatus : Swift.String {
   case Unread
   case Read
@@ -232,16 +181,10 @@ public enum MessageStatus : Swift.String {
   }
   public init?(rawValue: Swift.String)
 }
-@_inheritsConvenienceInitializers @objc public class SelectedBiometric : GMI.Model, Swift.Codable {
-  @objc deinit
-  @objc required dynamic public init()
-  required public init(from decoder: Swift.Decoder) throws
-  public func encode(to encoder: Swift.Encoder) throws
-}
 public protocol MessagesServiceManagerProtocol {
-  func setMessagesAndEnrollsUnread(completion: @escaping () -> ())
-  func checkAndRenderNextWorkItem()
-  func syncronizeAlertsAndEnrollments(completion: @escaping () -> ())
+  func setWorkItemsUnread(completion: @escaping () -> ())
+  func renderNextWorkItemIfNeeded()
+  func syncronizeWorkItems(completion: @escaping () -> ())
   func activeAlertsCountChanged(notifyBlock: @escaping (Swift.Int) -> ())
   func register(rootController: UIKit.UIViewController, delegate: GMI.InteractionManagerDelegate)
   func resetSkipped(for enroll: GMI.Enroll)
@@ -263,9 +206,9 @@ public protocol MessagesServiceManagerProtocol {
   public func resetSkipped(for enroll: GMI.Enroll)
   public func activeAlertsCountChanged(notifyBlock: @escaping (Swift.Int) -> ())
   public func register(rootController: UIKit.UIViewController, delegate: GMI.InteractionManagerDelegate)
-  public func setMessagesAndEnrollsUnread(completion: @escaping () -> ())
-  public func checkAndRenderNextWorkItem()
-  public func syncronizeAlertsAndEnrollments(completion: @escaping () -> ())
+  public func setWorkItemsUnread(completion: @escaping () -> ())
+  public func renderNextWorkItemIfNeeded()
+  public func syncronizeWorkItems(completion: @escaping () -> ())
   @objc deinit
 }
 @objc @_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers public class Config : GMI.Model, Swift.Codable {
