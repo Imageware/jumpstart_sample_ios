@@ -62,7 +62,7 @@ class MainViewModel: ObservableObject {
     
     func registerUser() {
         guard let account = self.account else { return }
-        deviceServiceManager.registerDevice(account: account, persistUser: true) { [weak self] (response) in
+        deviceServiceManager.registerDevice(account: account) { [weak self] (response) in
             switch response {
             case .success:
                 self?.alertTitle = "Confirm your email. You should receive email"
@@ -81,27 +81,15 @@ class MainViewModel: ObservableObject {
     
     func syncronize() {
         if let vc = (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.window?.rootViewController {
-            Instance.shared.interactionManager.register(viewController: vc, delegate: self)
+            messagesManager.register(rootController: vc, delegate: self)
         }
         messagesManager.syncronizeAlertsAndEnrollments {
-            if Instance.shared.captureFlowManager.isOkayToBeginCaptureFlow() {
-                if let enroll = Instance.shared.captureFlowManager.nextExpectedEnrollment(),
-                    let enrollCaptureFlow = CaptureFlow(enroll) {
-                    Instance.shared.captureFlowManager.beginCaptureFlow(captureFlow: enrollCaptureFlow)
-                } else if let alert = Instance.shared.captureFlowManager.nextUnreadQueueItem(),
-                    let alertCaptureFlow = CaptureFlow(alert) {
-                    Instance.shared.captureFlowManager.beginCaptureFlow(captureFlow: alertCaptureFlow)
-                }
-                else {
-                    self.alertTitle = "There is no pending enrolls or alerts"
-                    self.showingAlert.toggle()
-                }
-            }
+            self.messagesManager.checkAndRenderNextWorkItem()
         }
     }
     
     func countPendingAlertsAndEnrolls() {
-        self.alertTitle = "There are \(messagesManager.activeAlerts) pending alerts and \(messagesManager.activeEnrolls) enrolls"
+        self.alertTitle = "There are \(messagesManager.activeAlertsCount) pending alerts and \(messagesManager.activeEnrollsCount) enrolls"
         self.showingAlert.toggle()
     }
 }
