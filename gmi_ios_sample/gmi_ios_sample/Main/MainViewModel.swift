@@ -10,7 +10,7 @@ import GMI
 
 class MainViewModel: ObservableObject {
     
-    private var deviceServiceManager: DeviceServiceManagerProtocol = DeviceServiceManager()
+    private var deviceServiceManager: AccountServiceManagerProtocol = AccountServiceManager()
     private var messagesManager: MessagesServiceManagerProtocol = MessagesServiceManager()
     @Published var showingAlert = false
     var alertTitle: String = ""
@@ -41,14 +41,10 @@ class MainViewModel: ObservableObject {
         let account = Account()
         account.config = config
         account.email = email
-        deviceServiceManager.personForEmail(account: account) { response in
+        deviceServiceManager.person(for: account) { response in
             switch response {
             case .success(let person):
                 account.id = person.id
-                account.tenantEnrollServer = person.tenantEnrollServer
-                account.enrollServer = person.enrollServer
-                account.tenantVerifyServer = person.tenantVerifyServer
-                account.verifyServer = person.verifyServer
                 self.account = account
                 self.alertTitle = "Email \(self.email) successully found"
                 self.showingAlert.toggle()
@@ -62,10 +58,12 @@ class MainViewModel: ObservableObject {
     
     func registerUser() {
         guard let account = self.account else { return }
-        deviceServiceManager.registerDevice(account: account, persistUser: true) { [weak self] (response) in
+        self.alertTitle = "Confirm your email. You should receive email"
+        self.showingAlert.toggle()
+        deviceServiceManager.register(account: account, resendConfirmation: true) { [weak self] (response) in
             switch response {
             case .success:
-                self?.alertTitle = "Confirm your email. You should receive email"
+                self?.alertTitle = "Account registration successfully completed"
                 self?.showingAlert.toggle()
             case .error(let error):
                 if case .notFound = error {//this is unexpected because we just checked before eula
@@ -81,27 +79,15 @@ class MainViewModel: ObservableObject {
     
     func syncronize() {
         if let vc = (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.window?.rootViewController {
-            Instance.shared.interactionManager.register(viewController: vc, delegate: self)
+            messagesManager.register(rootController: vc, delegate: self)
         }
-        messagesManager.syncronizeAlertsAndEnrollments {
-            if Instance.shared.captureFlowManager.isOkayToBeginCaptureFlow() {
-                if let enroll = Instance.shared.captureFlowManager.nextExpectedEnrollment(),
-                    let enrollCaptureFlow = CaptureFlow(enroll) {
-                    Instance.shared.captureFlowManager.beginCaptureFlow(captureFlow: enrollCaptureFlow)
-                } else if let alert = Instance.shared.captureFlowManager.nextUnreadQueueItem(),
-                    let alertCaptureFlow = CaptureFlow(alert) {
-                    Instance.shared.captureFlowManager.beginCaptureFlow(captureFlow: alertCaptureFlow)
-                }
-                else {
-                    self.alertTitle = "There is no pending enrolls or alerts"
-                    self.showingAlert.toggle()
-                }
-            }
+        messagesManager.syncronizeWorkItems {
+            self.messagesManager.renderNextWorkItemIfNeeded()
         }
     }
     
     func countPendingAlertsAndEnrolls() {
-        self.alertTitle = "There are \(messagesManager.activeAlerts) pending alerts and \(messagesManager.activeEnrolls) enrolls"
+        self.alertTitle = "There are \(messagesManager.activeAlertsCount) pending alerts and \(messagesManager.activeEnrollsCount) enrolls"
         self.showingAlert.toggle()
     }
 }
