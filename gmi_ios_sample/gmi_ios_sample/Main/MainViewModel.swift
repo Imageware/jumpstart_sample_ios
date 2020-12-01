@@ -10,7 +10,7 @@ import GMI
 
 class MainViewModel: ObservableObject {
     
-    private var deviceServiceManager: DeviceServiceManagerProtocol = DeviceServiceManager()
+    private var deviceServiceManager: AccountServiceManagerProtocol = AccountServiceManager()
     private var messagesManager: MessagesServiceManagerProtocol = MessagesServiceManager()
     @Published var showingAlert = false
     var alertTitle: String = ""
@@ -41,14 +41,10 @@ class MainViewModel: ObservableObject {
         let account = Account()
         account.config = config
         account.email = email
-        deviceServiceManager.personForEmail(account: account) { response in
+        deviceServiceManager.person(for: account) { response in
             switch response {
             case .success(let person):
                 account.id = person.id
-                account.tenantEnrollServer = person.tenantEnrollServer
-                account.enrollServer = person.enrollServer
-                account.tenantVerifyServer = person.tenantVerifyServer
-                account.verifyServer = person.verifyServer
                 self.account = account
                 self.alertTitle = "Email \(self.email) successully found"
                 self.showingAlert.toggle()
@@ -62,10 +58,12 @@ class MainViewModel: ObservableObject {
     
     func registerUser() {
         guard let account = self.account else { return }
-        deviceServiceManager.registerDevice(account: account) { [weak self] (response) in
+        self.alertTitle = "Confirm your email. You should receive email"
+        self.showingAlert.toggle()
+        deviceServiceManager.register(account: account, resendConfirmation: true) { [weak self] (response) in
             switch response {
             case .success:
-                self?.alertTitle = "Confirm your email. You should receive email"
+                self?.alertTitle = "Account registration successfully completed"
                 self?.showingAlert.toggle()
             case .error(let error):
                 if case .notFound = error {//this is unexpected because we just checked before eula
@@ -83,8 +81,8 @@ class MainViewModel: ObservableObject {
         if let vc = (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.window?.rootViewController {
             messagesManager.register(rootController: vc, delegate: self)
         }
-        messagesManager.syncronizeAlertsAndEnrollments {
-            self.messagesManager.checkAndRenderNextWorkItem()
+        messagesManager.syncronizeWorkItems {
+            self.messagesManager.renderNextWorkItemIfNeeded()
         }
     }
     
