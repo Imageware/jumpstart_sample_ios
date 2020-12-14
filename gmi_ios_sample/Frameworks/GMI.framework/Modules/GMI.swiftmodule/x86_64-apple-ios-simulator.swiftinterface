@@ -1,0 +1,233 @@
+// swift-interface-format-version: 1.0
+// swift-compiler-version: Apple Swift version 5.3.1 (swiftlang-1200.0.41 clang-1200.0.32.8)
+// swift-module-flags: -target x86_64-apple-ios13.0-simulator -enable-objc-interop -enable-library-evolution -swift-version 5 -enforce-exclusivity=checked -Onone -module-name GMI
+import AVFoundation
+import Foundation
+@_exported import GMI
+import IWS_Shared_Components
+import LocalAuthentication
+import Realm
+import RealmSwift
+import Security
+import Swift
+import SwiftUI
+import UIKit
+@_inheritsConvenienceInitializers @objc public class Capturable : GMI.Model {
+  @objc dynamic public var hidden: Foundation.Date?
+  @objc dynamic public var skipped: Foundation.Date?
+  public var captureType: GMI.CaptureType? {
+    get
+    set(newValue)
+  }
+  @objc dynamic public var account: GMI.Account?
+  public enum Modality : Swift.String {
+    case verify
+    case enroll
+    public typealias RawValue = Swift.String
+    public init?(rawValue: Swift.String)
+    public var rawValue: Swift.String {
+      get
+    }
+  }
+  @objc deinit
+  @objc required dynamic public init()
+}
+@_hasMissingDesignatedInitializers public class Person : Swift.Codable {
+  public var id: Swift.String?
+  public var tenantEnrollServer: Swift.String?
+  @objc deinit
+  required public init(from decoder: Swift.Decoder) throws
+  public func encode(to encoder: Swift.Encoder) throws
+}
+public protocol AccountServiceManagerProtocol {
+  func register(account: GMI.Account, resendConfirmation: Swift.Bool, completion: @escaping (GMI.GMIResponse<Swift.Void>) -> ())
+  func person(for account: GMI.Account, completion: @escaping (GMI.GMIResponse<GMI.Person>) -> ())
+  func save(account: GMI.Account)
+  func delete(account: GMI.Account)
+  func removePerson(for account: GMI.Account, completion: @escaping (GMI.GMIResponse<Swift.Void>) -> ())
+  func update(account: GMI.Account, name: Swift.String)
+  func updatePush(token: Swift.String)
+  var gmiVersion: Swift.String { get }
+  var accounts: [GMI.Account] { get }
+}
+@_hasMissingDesignatedInitializers public class AccountServiceManager : GMI.AccountServiceManagerProtocol {
+  public convenience init()
+  public var gmiVersion: Swift.String {
+    get
+  }
+  public var accounts: [GMI.Account] {
+    get
+  }
+  public func save(account: GMI.Account)
+  public func delete(account: GMI.Account)
+  public func update(account: GMI.Account, name: Swift.String)
+  public func updatePush(token: Swift.String)
+  public func register(account: GMI.Account, resendConfirmation: Swift.Bool, completion: @escaping (GMI.GMIResponse<Swift.Void>) -> ())
+  public func person(for account: GMI.Account, completion: @escaping (GMI.GMIResponse<GMI.Person>) -> ())
+  public func removePerson(for account: GMI.Account, completion: @escaping (GMI.GMIResponse<Swift.Void>) -> ())
+  @objc deinit
+}
+@objc @_inheritsConvenienceInitializers public class Model : RealmSwift.Object {
+  public static var realmTokens: [Realm.RLMNotificationToken]
+  @objc override public static func primaryKey() -> Swift.String?
+  @objc deinit
+  @objc required dynamic public init()
+}
+public protocol InteractionManagerDelegate : AnyObject {
+  func alertCompleted(_ captureable: GMI.Capturable)
+  func alertAccepted(_ captureable: GMI.Capturable)
+  func alertRejected(_ captureable: GMI.Capturable)
+  func enrollmentHidden(_ captureable: GMI.Capturable)
+  func enrollmentComplete(_ captureable: GMI.Capturable)
+}
+public class Keychain {
+  public init()
+  public func deleteExistingKeys()
+  public func generateAndStoreNewKey() throws
+  public var publicKey: Security.SecKey? {
+    get
+  }
+  public var privateKey: Security.SecKey? {
+    get
+  }
+  @objc deinit
+}
+@_inheritsConvenienceInitializers @objc public class Account : GMI.Model {
+  @objc dynamic public var email: Swift.String
+  @objc dynamic public var config: GMI.Config?
+  @objc dynamic public var id: Swift.String?
+  @objc dynamic public var name: Swift.String?
+  @objc dynamic public var emailVerified: Swift.Bool
+  @objc deinit
+  @objc required dynamic public init()
+}
+public enum GMIError : Swift.Error {
+  case notFound
+  case requestFailed
+  case invalidParameters(_: Swift.String)
+  case malformedJson
+  case maxRetriesExceeded
+  case messageExpired
+  case other(Swift.Error?)
+}
+public enum GMIResponse<T> {
+  case success(T)
+  case error(GMI.GMIError)
+}
+@_inheritsConvenienceInitializers @objc public class Enroll : GMI.Capturable, Swift.Codable {
+  @objc dynamic public var completed: Swift.Bool
+  @objc dynamic public var messageID: Swift.Int
+  @objc dynamic public var metadata: GMI.EnrollMetadata?
+  @objc deinit
+  @objc required dynamic public init()
+  required public init(from decoder: Swift.Decoder) throws
+  public func encode(to encoder: Swift.Encoder) throws
+}
+@_inheritsConvenienceInitializers @objc public class EnrollMetadata : GMI.Model, Swift.Codable {
+  @objc dynamic public var enrollData: GMI.EnrollData?
+  @objc deinit
+  @objc required dynamic public init()
+  required public init(from decoder: Swift.Decoder) throws
+  public func encode(to encoder: Swift.Encoder) throws
+}
+@_inheritsConvenienceInitializers @objc public class EnrollData : GMI.Model, Swift.Codable {
+  public var captureType: GMI.CaptureType? {
+    get
+    set(newValue)
+  }
+  @objc dynamic public var algCode: Swift.String?
+  @objc override public static func ignoredProperties() -> [Swift.String]
+  @objc deinit
+  @objc required dynamic public init()
+  required public init(from decoder: Swift.Decoder) throws
+  public func encode(to encoder: Swift.Encoder) throws
+}
+extension UIStackView {
+  public func resizeSubViews()
+}
+public enum CaptureType : Swift.String, Swift.CaseIterable {
+  case pin
+  case palm
+  case face
+  case voice
+  case passphrase
+  case device
+  case yesno
+  public var userFriendlyName: Swift.String {
+    get
+  }
+  public var icon: UIKit.UIImage? {
+    get
+  }
+  public static func < (left: GMI.CaptureType, right: GMI.CaptureType) -> Swift.Bool
+  public typealias RawValue = Swift.String
+  public init?(rawValue: Swift.String)
+  public var rawValue: Swift.String {
+    get
+  }
+  public typealias AllCases = [GMI.CaptureType]
+  public static var allCases: [GMI.CaptureType] {
+    get
+  }
+}
+public enum MessageStatus : Swift.String {
+  case Unread
+  case Read
+  case Rejected
+  case Done
+  public typealias RawValue = Swift.String
+  public var rawValue: Swift.String {
+    get
+  }
+  public init?(rawValue: Swift.String)
+}
+public protocol MessagesServiceManagerProtocol {
+  func setWorkItemsUnread(completion: @escaping () -> ())
+  func renderNextWorkItemIfNeeded()
+  func syncronizeWorkItems(completion: @escaping () -> ())
+  func activeAlertsCountChanged(notifyBlock: @escaping (Swift.Int) -> ())
+  func register(rootController: UIKit.UIViewController, delegate: GMI.InteractionManagerDelegate)
+  func resetSkipped(for enroll: GMI.Enroll)
+  var activeAlertsCount: Swift.Int { get }
+  var activeEnrollsCount: Swift.Int { get }
+  var enrolls: [GMI.Enroll] { get }
+}
+@_hasMissingDesignatedInitializers public class MessagesServiceManager : GMI.MessagesServiceManagerProtocol {
+  public convenience init()
+  public var activeAlertsCount: Swift.Int {
+    get
+  }
+  public var activeEnrollsCount: Swift.Int {
+    get
+  }
+  public var enrolls: [GMI.Enroll] {
+    get
+  }
+  public func resetSkipped(for enroll: GMI.Enroll)
+  public func activeAlertsCountChanged(notifyBlock: @escaping (Swift.Int) -> ())
+  public func register(rootController: UIKit.UIViewController, delegate: GMI.InteractionManagerDelegate)
+  public func setWorkItemsUnread(completion: @escaping () -> ())
+  public func renderNextWorkItemIfNeeded()
+  public func syncronizeWorkItems(completion: @escaping () -> ())
+  @objc deinit
+}
+@objc @_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers public class Config : GMI.Model, Swift.Codable {
+  @objc dynamic public var presetName: Swift.String
+  @objc dynamic public var presetTitle: Swift.String
+  @objc dynamic public var gmiServerUrl: Swift.String
+  @objc dynamic public var gmiClientSecret: Swift.String
+  @objc dynamic public var gmiClientId: Swift.String
+  @objc dynamic public var gmiUserManagerUrl: Swift.String
+  @objc dynamic public var defaultTenantCode: Swift.String
+  @objc dynamic public var applicationCode: Swift.String
+  public var defaultRegions: [Swift.String]?
+  @objc dynamic public var presetTag: Swift.String?
+  public var isProduction: Swift.Bool {
+    get
+  }
+  @objc override public static func ignoredProperties() -> [Swift.String]
+  required public init(presetName: Swift.String, presetTitle: Swift.String, serverUrl: Swift.String, clientSecret: Swift.String, clientID: Swift.String, userManagerUrl: Swift.String, defaultTenantCode: Swift.String, applicationCode: Swift.String)
+  @objc deinit
+  required public init(from decoder: Swift.Decoder) throws
+  public func encode(to encoder: Swift.Encoder) throws
+}

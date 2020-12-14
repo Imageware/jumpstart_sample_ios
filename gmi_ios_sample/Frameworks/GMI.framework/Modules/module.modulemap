@@ -1,0 +1,11 @@
+framework module GMI {
+  umbrella header "GMI.h"
+
+  export *
+  module * { export * }
+}
+
+module GMI.Swift {
+    header "GMI-Swift.h"
+    requires objc
+}
