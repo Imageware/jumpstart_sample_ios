@@ -7,8 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		19CFA0DD25536EE800013A8E /* GMI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 19DE2973255310AD00370CE1 /* GMI.framework */; };
-		19CFA0DE25536EE800013A8E /* GMI.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 19DE2973255310AD00370CE1 /* GMI.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		193BAD61258ACA870063655E /* GMI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 193BAD55258AC6350063655E /* GMI.framework */; };
+		193BAD62258ACA870063655E /* GMI.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 193BAD55258AC6350063655E /* GMI.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		19DE29542552336500370CE1 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19DE29532552336500370CE1 /* AppDelegate.swift */; };
 		19DE29562552336500370CE1 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19DE29552552336500370CE1 /* SceneDelegate.swift */; };
 		19DE29582552336500370CE1 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19DE29572552336500370CE1 /* MainView.swift */; };
@@ -19,13 +19,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		19CFA0DF25536EE800013A8E /* Embed Frameworks */ = {
+		193BAD63258ACA870063655E /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				19CFA0DE25536EE800013A8E /* GMI.framework in Embed Frameworks */,
+				193BAD62258ACA870063655E /* GMI.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -33,6 +33,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		193BAD55258AC6350063655E /* GMI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = GMI.framework; sourceTree = "<group>"; };
 		19DE29502552336500370CE1 /* gmi_ios_sample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = gmi_ios_sample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		19DE29532552336500370CE1 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		19DE29552552336500370CE1 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -42,7 +43,6 @@
 		19DE295F2552336800370CE1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		19DE29612552336800370CE1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		19DE296925530F0A00370CE1 /* MainViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewModel.swift; sourceTree = "<group>"; };
-		19DE2973255310AD00370CE1 /* GMI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = GMI.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -50,7 +50,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				19CFA0DD25536EE800013A8E /* GMI.framework in Frameworks */,
+				193BAD61258ACA870063655E /* GMI.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -108,7 +108,7 @@
 		19DE296E2553107500370CE1 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				19DE2973255310AD00370CE1 /* GMI.framework */,
+				193BAD55258AC6350063655E /* GMI.framework */,
 			);
 			path = Frameworks;
 			sourceTree = "<group>";
@@ -123,7 +123,7 @@
 				19DE294C2552336500370CE1 /* Sources */,
 				19DE294D2552336500370CE1 /* Frameworks */,
 				19DE294E2552336500370CE1 /* Resources */,
-				19CFA0DF25536EE800013A8E /* Embed Frameworks */,
+				193BAD63258ACA870063655E /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -331,6 +331,7 @@
 				ENABLE_PREVIEWS = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
+					"$(PROJECT_DIR)/Frameworks/**",
 					"$(PROJECT_DIR)/Frameworks",
 				);
 				INFOPLIST_FILE = gmi_ios_sample/Info.plist;
@@ -338,9 +339,11 @@
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.iwsinc.gmi-ios-sample";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_INCLUDE_PATHS = "";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -356,6 +359,7 @@
 				ENABLE_PREVIEWS = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
+					"$(PROJECT_DIR)/Frameworks/**",
 					"$(PROJECT_DIR)/Frameworks",
 				);
 				INFOPLIST_FILE = gmi_ios_sample/Info.plist;
@@ -363,9 +367,11 @@
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.iwsinc.gmi-ios-sample";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_INCLUDE_PATHS = "";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
