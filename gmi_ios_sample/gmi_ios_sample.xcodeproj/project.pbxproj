@@ -3,12 +3,11 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
-		193BAD61258ACA870063655E /* GMI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 193BAD55258AC6350063655E /* GMI.framework */; };
-		193BAD62258ACA870063655E /* GMI.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 193BAD55258AC6350063655E /* GMI.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		195C58D2258E5AA8008968A6 /* GMIPackage in Frameworks */ = {isa = PBXBuildFile; productRef = 195C58D1258E5AA8008968A6 /* GMIPackage */; };
 		19DE29542552336500370CE1 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19DE29532552336500370CE1 /* AppDelegate.swift */; };
 		19DE29562552336500370CE1 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19DE29552552336500370CE1 /* SceneDelegate.swift */; };
 		19DE29582552336500370CE1 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19DE29572552336500370CE1 /* MainView.swift */; };
@@ -19,13 +18,12 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		193BAD63258ACA870063655E /* Embed Frameworks */ = {
+		193BAD71258ACCD20063655E /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				193BAD62258ACA870063655E /* GMI.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -33,7 +31,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		193BAD55258AC6350063655E /* GMI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = GMI.framework; sourceTree = "<group>"; };
+		195C58D3258E60FE008968A6 /* Combine.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Combine.framework; path = System/Library/Frameworks/Combine.framework; sourceTree = SDKROOT; };
+		195C58DB258E6818008968A6 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
 		19DE29502552336500370CE1 /* gmi_ios_sample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = gmi_ios_sample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		19DE29532552336500370CE1 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		19DE29552552336500370CE1 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -50,7 +49,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				193BAD61258ACA870063655E /* GMI.framework in Frameworks */,
+				195C58D2258E5AA8008968A6 /* GMIPackage in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -108,7 +107,8 @@
 		19DE296E2553107500370CE1 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				193BAD55258AC6350063655E /* GMI.framework */,
+				195C58DB258E6818008968A6 /* SwiftUI.framework */,
+				195C58D3258E60FE008968A6 /* Combine.framework */,
 			);
 			path = Frameworks;
 			sourceTree = "<group>";
@@ -123,13 +123,16 @@
 				19DE294C2552336500370CE1 /* Sources */,
 				19DE294D2552336500370CE1 /* Frameworks */,
 				19DE294E2552336500370CE1 /* Resources */,
-				193BAD63258ACA870063655E /* Embed Frameworks */,
+				193BAD71258ACCD20063655E /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
 			name = gmi_ios_sample;
+			packageProductDependencies = (
+				195C58D1258E5AA8008968A6 /* GMIPackage */,
+			);
 			productName = gmi_ios_sample;
 			productReference = 19DE29502552336500370CE1 /* gmi_ios_sample.app */;
 			productType = "com.apple.product-type.application";
@@ -157,6 +160,9 @@
 				Base,
 			);
 			mainGroup = 19DE29472552336500370CE1;
+			packageReferences = (
+				195C58D0258E5AA8008968A6 /* XCRemoteSwiftPackageReference "GMIPackage" */,
+			);
 			productRefGroup = 19DE29512552336500370CE1 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -242,6 +248,7 @@
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
+				FRAMEWORK_SEARCH_PATHS = "$(PRJ_DIR)";
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -262,6 +269,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_INCLUDE_PATHS = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
@@ -303,6 +311,7 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				FRAMEWORK_SEARCH_PATHS = "$(PRJ_DIR)";
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -316,6 +325,7 @@
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_INCLUDE_PATHS = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				VALIDATE_PRODUCT = YES;
 			};
@@ -328,12 +338,14 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"gmi_ios_sample/Preview Content\"";
+				DEVELOPMENT_TEAM = 7B4863M823;
+				ENABLE_BITCODE = NO;
 				ENABLE_PREVIEWS = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/Frameworks/**",
-					"$(PROJECT_DIR)/Frameworks",
+					"$(BUILT_PRODUCTS_DIR)/**",
 				);
+				INCLUDED_RECURSIVE_SEARCH_PATH_SUBDIRECTORIES = "";
 				INFOPLIST_FILE = gmi_ios_sample/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -341,11 +353,13 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
+				LIBRARY_SEARCH_PATHS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.iwsinc.gmi-ios-sample";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_INCLUDE_PATHS = "";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				USER_HEADER_SEARCH_PATHS = "";
 			};
 			name = Debug;
 		};
@@ -356,12 +370,14 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"gmi_ios_sample/Preview Content\"";
+				DEVELOPMENT_TEAM = 7B4863M823;
+				ENABLE_BITCODE = NO;
 				ENABLE_PREVIEWS = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/Frameworks/**",
-					"$(PROJECT_DIR)/Frameworks",
+					"$(BUILT_PRODUCTS_DIR)/**",
 				);
+				INCLUDED_RECURSIVE_SEARCH_PATH_SUBDIRECTORIES = "";
 				INFOPLIST_FILE = gmi_ios_sample/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -369,11 +385,13 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
+				LIBRARY_SEARCH_PATHS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.iwsinc.gmi-ios-sample";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_INCLUDE_PATHS = "";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				USER_HEADER_SEARCH_PATHS = "";
 			};
 			name = Release;
 		};
@@ -399,6 +417,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		195C58D0258E5AA8008968A6 /* XCRemoteSwiftPackageReference "GMIPackage" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/ImageWare/GMIPackage.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.3.8;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		195C58D1258E5AA8008968A6 /* GMIPackage */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 195C58D0258E5AA8008968A6 /* XCRemoteSwiftPackageReference "GMIPackage" */;
+			productName = GMIPackage;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 19DE29482552336500370CE1 /* Project object */;
 }
