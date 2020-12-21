@@ -15,13 +15,13 @@ class MainViewModel: ObservableObject {
     @Published var showingAlert = false
     var alertTitle: String = ""
     
-    @Published var serverURL: String = "https://eks-gmiserver-dev.iwsinc.com"
-    @Published var userManagerURL: String = "https://eks-usermanager-dev.iwsinc.com"
+    @Published var serverURL: String = "https://gmi.prod.imageware.io/v1/gmiserver"
+    @Published var userManagerURL: String =    "https://gmi.prod.imageware.io/v1/oauth2"
     
     @Published var clientID: String = "GoVerifyID"
-    @Published var clientSecret: String = "Un9#He!#TshDmv/Z"
+    @Published var clientSecret: String = "73rOgqah&PVD"
     
-    @Published var tenantCode: String = "ImageWareRefresh"
+    @Published var tenantCode: String = "ImageWare2"
     @Published var applicationCode: String = "GoVerifyID"
     
     @Published var email: String = ""
