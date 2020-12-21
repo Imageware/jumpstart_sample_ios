@@ -26,53 +26,35 @@ class MainViewModel: ObservableObject {
     
     @Published var email: String = ""
     
-    var config: Config {
-        return Config(presetName: "", presetTitle: "", serverUrl: self.serverURL, clientSecret: self.clientSecret, clientID: self.clientID, userManagerUrl: self.userManagerURL, defaultTenantCode: self.tenantCode, applicationCode: self.applicationCode)
+    var config: Configuration {
+        return Configuration(presetTitle: "", serverUrl: self.serverURL, clientSecret: self.clientSecret, clientID: self.clientID, userManagerUrl: self.userManagerURL, defaultTenantCode: self.tenantCode, applicationCode: self.applicationCode)
     }
-    var account: Account?
     
-    func initializeSDK() {
-        try? Keychain().generateAndStoreNewKey()
-        self.alertTitle = "SDK Initialized"
-        self.showingAlert.toggle()
-    }
-    func checkEmail() {
-       
-        let account = Account()
-        account.config = config
-        account.email = email
-        deviceServiceManager.person(for: account) { response in
-            switch response {
-            case .success(let person):
-                account.id = person.id
-                self.account = account
-                self.alertTitle = "Email \(self.email) successully found"
-                self.showingAlert.toggle()
-            case .error:
-                self.alertTitle = "Email not found in the selected Region"
-                self.showingAlert.toggle()
-            @unknown default: break
-            }
-        }
-    }
+    var account: Profile?
+    
     
     func registerUser() {
-        guard let account = self.account else { return }
-        self.alertTitle = "Confirm your email. You should receive email"
-        self.showingAlert.toggle()
-        deviceServiceManager.register(account: account, resendConfirmation: true) { [weak self] (response) in
+        let profile = Profile(name: "", email: email, configuration: config)
+
+        deviceServiceManager.register(profile: profile, resendConfirmation: true) { (response) in
             switch response {
-            case .success:
-                self?.alertTitle = "Account registration successfully completed"
-                self?.showingAlert.toggle()
-            case .error(let error):
-                if case .notFound = error {//this is unexpected because we just checked before eula
-                    self?.alertTitle = "Email not found in the selected Region"
-                } else { //if we don't get a 200, something is broken that the user can't do anything about
-                    self?.alertTitle = "Server Error"
+            case .success(let status):
+                switch status {
+                case .pendingVerification:
+                    self.alertTitle = "Check your email to confirm registration"
+                    self.showingAlert.toggle()
+                case .userVerified:
+                    self.alertTitle = "Account registration successfully completed"
+                    self.showingAlert.toggle()
                 }
-                self?.showingAlert.toggle()
-            @unknown default: break
+            case .error(let error):
+                switch error {
+                case .notFound:
+                    self.alertTitle = "Email not found in the selected Region"
+                default:
+                    self.alertTitle = "Server Error"
+                }
+                self.showingAlert.toggle()
             }
         }
     }
@@ -81,7 +63,7 @@ class MainViewModel: ObservableObject {
         if let vc = (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.window?.rootViewController {
             messagesManager.register(rootController: vc, delegate: self)
         }
-        messagesManager.syncronizeWorkItems {
+        messagesManager.synchronizeWorkItems {
             self.messagesManager.renderNextWorkItemIfNeeded()
         }
     }
@@ -95,27 +77,27 @@ class MainViewModel: ObservableObject {
 
 extension MainViewModel: InteractionManagerDelegate {
     
-    public func alertCompleted(_ captureable: Capturable) {
+    public func alertCompleted() {
         self.alertTitle = "alert completed"
         self.showingAlert.toggle()
     }
     
-    public func alertAccepted(_ captureable: Capturable) {
+    public func alertAccepted() {
         self.alertTitle = "alert accepted"
         self.showingAlert.toggle()
     }
     
-    public func alertRejected(_ captureable: Capturable) {
+    public func alertRejected() {
         self.alertTitle = "alert rejected"
         self.showingAlert.toggle()
     }
     
-    public func enrollmentHidden(_ captureable: Capturable) {
+    public func enrollmentHidden() {
         self.alertTitle = "enrollment hidden"
         self.showingAlert.toggle()
     }
     
-    public func enrollmentComplete(_ captureable: Capturable) {
+    public func enrollmentComplete() {
         self.alertTitle = "enrollment complete"
         self.showingAlert.toggle()
     }

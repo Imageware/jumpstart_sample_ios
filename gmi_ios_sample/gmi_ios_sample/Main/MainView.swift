@@ -35,13 +35,11 @@ struct MainView: View {
                 TextField("GMI Application Code", text: self.$viewModel.applicationCode)
             }
             
-            Button(action: { viewModel.initializeSDK() }) { Text("Initialize GMI SDK") }
             
             Section(header: Text("Email / User ID")) {
                 TextField("email", text: self.$viewModel.email)
             }
             
-            Button(action: { viewModel.checkEmail() }) { Text("Check Email") }
             Button(action: { viewModel.registerUser() }) { Text("Register User") }
             Button(action: { viewModel.syncronize() }) { Text("Syncronize and run first expected item") }
             Button(action: { viewModel.countPendingAlertsAndEnrolls() }) { Text("Count of pending alerts and enrolls") }
