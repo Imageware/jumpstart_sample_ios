@@ -15,16 +15,19 @@ class MainViewModel: ObservableObject {
     @Published var showingAlert = false
     var alertTitle: String = ""
     
-    @Published var serverURL: String = "https://gmi.prod.imageware.io/v1/gmiserver"
+    @Published var serverURL: String = "https://gmi.prod.imageware.io/v2/gmiserver"
     @Published var userManagerURL: String =    "https://gmi.prod.imageware.io/v1/oauth2"
     
     @Published var clientID: String = "GoVerifyID"
     @Published var clientSecret: String = "73rOgqah&PVD"
     
-    @Published var tenantCode: String = "ImageWare2"
+    @Published var tenantCode: String = "ImageWare"
     @Published var applicationCode: String = "GoVerifyID"
     
     @Published var email: String = ""
+    
+    @Published var pincode: String = ""
+    @Published var isRegistered: Bool = false
     
     var config: Configuration {
         return Configuration(presetTitle: "", serverUrl: self.serverURL, clientSecret: self.clientSecret, clientID: self.clientID, userManagerUrl: self.userManagerURL, defaultTenantCode: self.tenantCode, applicationCode: self.applicationCode)
@@ -32,21 +35,31 @@ class MainViewModel: ObservableObject {
     
     var account: Profile?
     
-    
+    func validateTenant() {
+        guard let profile = account else { return }
+        deviceServiceManager.validate(profile: profile, validationCode: self.pincode) { (response) in
+            switch response {
+            case .success:
+                self.alertTitle = "Successully added a new tenant"
+                self.showingAlert.toggle()
+                self.pincode = ""
+            case .error:
+                self.alertTitle = "There was an error adding a new tenant. Check the correctness of the PIN and try again."
+                self.showingAlert.toggle()
+                self.pincode = ""
+            }
+        }
+    }
     func registerUser() {
         let profile = Profile(name: "", email: email, configuration: config)
 
-        deviceServiceManager.register(profile: profile, resendConfirmation: true) { (response) in
+        deviceServiceManager.register(profile: profile) { (response) in
             switch response {
-            case .success(let status):
-                switch status {
-                case .pendingVerification:
-                    self.alertTitle = "Check your email to confirm registration"
-                    self.showingAlert.toggle()
-                case .userVerified:
-                    self.alertTitle = "Account registration successfully completed"
-                    self.showingAlert.toggle()
-                }
+            case .success(let profile):
+                self.account = profile
+                self.alertTitle = "Check your email. Validate tenants you want to add"
+                self.showingAlert.toggle()
+                self.isRegistered = true
             case .error(let error):
                 switch error {
                 case .notFound:
